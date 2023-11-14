@@ -5,14 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User,Long> {
     //there are some method to access database, you can click on super class to see...
     //if you want to custom or add method you can use @Query annotation with JPQL syntax ...
     //For example: you want to create method to select User by username
     //Note that: the column name is the name of attribute in class not the name of column in database
     //Note that: the table name is the name of class not the name of schema in database
-    @Query("SELECT u FROM User u Where u.username = :tendangnhap")
-    User findByUsername(@Param("tendangnhap") String username);
+    @Query("SELECT u FROM User u Where u.userName = :tendangnhap")
+    Optional<User> findByUsername(@Param("tendangnhap") String username);
+
 
     // ...
     //We can use also native SQL to define our query.

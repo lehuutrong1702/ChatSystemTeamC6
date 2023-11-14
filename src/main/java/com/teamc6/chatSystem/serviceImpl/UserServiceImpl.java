@@ -16,7 +16,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Override
-    public User saveUser(User u) {
+    public User save(User u) {
         var optional = userRepository.findById(u.getUserId());
         if(optional.isPresent())
         {
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUser() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean deleteUser(User u) {
+    public Boolean delete(User u) {
         Optional<User> optional = userRepository.findById(u.getUserId());
         if(!optional.isPresent())
         {
