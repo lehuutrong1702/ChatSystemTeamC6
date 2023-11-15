@@ -13,7 +13,8 @@ public interface ReportSpamRepository extends JpaRepository<ReportSpam,Long> {
 
     //List<ReportSpam> findAllByOrderByNameAsc();
 
-   // List<ReportSpam> findAllByOrderByCreateDateAsc();
+    @Query("SELECT r FROM ReportSpam r ORDER BY r.timeReport ASC")
+    List<ReportSpam> sortByOrderByCreateDateAsc();
 
     @Query("SELECT r FROM ReportSpam r WHERE r.timeReport BETWEEN :dateStart AND :dateFinish")
     List<ReportSpam> filterByTime(Date dateStart, Date dateFinish);

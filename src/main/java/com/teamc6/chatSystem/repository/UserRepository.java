@@ -1,10 +1,14 @@
 package com.teamc6.chatSystem.repository;
 
+import com.teamc6.chatSystem.entity.GroupChat;
+import com.teamc6.chatSystem.entity.ReportSpam;
 import com.teamc6.chatSystem.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
@@ -16,6 +20,21 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM User u Where u.userName = :tendangnhap")
     Optional<User> findByUsername(@Param("tendangnhap") String username);
 
+    @Query("SELECT r FROM User r WHERE r.timeRegister BETWEEN :dateStart AND :dateFinish")
+    List<User> filterByTime(Date dateStart, Date dateFinish);
+
+    @Query("SELECT u FROM User u WHERE u.userName LIKE %:searchName%")
+    List<User> filterName(@Param("searchName") String searchName);
+
+
+    @Query("SELECT r FROM User r WHERE r.timeRegister BETWEEN :dateStart AND :dateFinish ORDER BY r.userName ASC")
+    List<User> sortOrderByNameAscNewRegister(Date dateStart, Date dateFinish);
+
+    @Query("SELECT r FROM User r WHERE r.timeRegister BETWEEN :dateStart AND :dateFinish ORDER BY r.timeRegister ASC")
+    List<User> sortOrderByCreateDateAscNewRegister(Date dateStart, Date dateFinish);
+
+    @Query("SELECT u FROM User u WHERE u.userName LIKE %:searchName% AND u.timeRegister BETWEEN :dateStart AND :dateFinish")
+    List<User> filterByNameNewRegister(Date dateStart, Date dateFinish, @Param("searchName") String name);
     // ...
     //We can use also native SQL to define our query.
     // All we have to do is set the value of the nativeQuery attribute to true

@@ -13,9 +13,11 @@ public interface GroupChatRepository extends JpaRepository<GroupChat,Long> {
     @Query("SELECT g FROM GroupChat g WHERE g.groupName LIKE %:searchName%")
     List<GroupChat> filterName(@Param("searchName") String searchName);
 
-//   List<GroupChat> findAllByOrderByNameAsc();
+    @Query("SELECT g FROM GroupChat g ORDER BY g.groupName ASC")
+    List<GroupChat> sortOrderByNameAsc();
 
- //   List<GroupChat> findAllByOrderByCreateDateAsc();
+    @Query("SELECT g FROM GroupChat g ORDER BY g.timeCreate ASC")
+    List<GroupChat> sortOrderByCreateDateAsc();
 
     @Query("SELECT g FROM GroupChat g WHERE g.groupName = :name")
     Optional<GroupChat> findByUsername(@Param("name") String username);
