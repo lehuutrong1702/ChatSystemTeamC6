@@ -16,8 +16,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Override
+<<<<<<< HEAD
     public User saveUser(User u) {
         var optional = userRepository.findByUsername(u.getUserName());
+=======
+    public User save(User u) {
+        var optional = userRepository.findById(u.getUserId());
+>>>>>>> 3412976f31522ef633f2297776ff20a73285be2a
         if(optional.isPresent())
         {
             throw new ResourceNotAcceptableExecption("User", "username", u.getUserId());
@@ -26,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUser() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
@@ -63,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean deleteUser(User u) {
+    public Boolean delete(User u) {
         Optional<User> optional = userRepository.findById(u.getUserId());
         if(!optional.isPresent())
         {
