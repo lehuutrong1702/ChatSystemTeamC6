@@ -53,10 +53,6 @@ public class User {
     )
     private Set<User> blockers;
 
-
-
-
-
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(name="user_group",
             joinColumns = {@JoinColumn(name="user_id")},

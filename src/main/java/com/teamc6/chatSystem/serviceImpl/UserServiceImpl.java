@@ -17,10 +17,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Override
     public User saveUser(User u) {
-        var optional = userRepository.findById(u.getUserId());
+        var optional = userRepository.findByUsername(u.getUserName());
         if(optional.isPresent())
         {
-            throw new ResourceNotAcceptableExecption("User", "user", u.getUserId());
+            throw new ResourceNotAcceptableExecption("User", "username", u.getUserId());
         }
         return userRepository.saveAndFlush(u);
     }
@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optional = userRepository.findByUsername(userName);
         if(!optional.isPresent())
         {
+
             throw new ResourceNotFoundException("User", "User Name: ", userName);
         }
         return optional.get();
