@@ -2,14 +2,17 @@ package com.teamc6.chatSystem.controller;
 
 
 import com.teamc6.chatSystem.entity.User;
+import com.teamc6.chatSystem.entity.UserActiveSession;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,12 +24,12 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
-        return new ResponseEntity<User>(userService.saveUser(u), HttpStatus.CREATED);
+        return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
     }
 
     @GetMapping()
     public List<User> findAll(){
-        return userService.findAllUser();
+        return userService.findAll();
     }
 
     @GetMapping("{id}")
@@ -38,10 +41,18 @@ public class UserController {
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<Boolean> delete(@RequestBody User u){
-        return new ResponseEntity<Boolean>(userService.deleteUser(u),HttpStatus.OK);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable("id") long id){
+        return new ResponseEntity<Boolean>(userService.deleteById(id),HttpStatus.OK);
 
     }
+
+    @PutMapping()
+    public ResponseEntity<User> updatePassword(@RequestParam(value = "newPassword",defaultValue = "") String newPassword,
+                                               @RequestBody User u){
+        return new ResponseEntity<User>(userService.updatePassWord(u,newPassword),HttpStatus.OK);
+    }
+
+
 
 }

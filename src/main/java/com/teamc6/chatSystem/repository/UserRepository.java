@@ -15,10 +15,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     //Note that: the table name is the name of class not the name of schema in database
     @Query("SELECT u FROM User u Where u.userName = :tendangnhap")
     Optional<User> findByUsername(@Param("tendangnhap") String username);
-<<<<<<< HEAD
-=======
-
->>>>>>> 3412976f31522ef633f2297776ff20a73285be2a
 
     // ...
     //We can use also native SQL to define our query.

@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface ReportSpamRepository extends JpaRepository<ReportSpam,Long> {
 
-    List<ReportSpam> findAllByOrderByNameAsc();
+    //List<ReportSpam> findAllByOrderByNameAsc();
 
-    List<ReportSpam> findAllByOrderByCreateDateAsc();
+   // List<ReportSpam> findAllByOrderByCreateDateAsc();
 
-    @Query("SELECT r FROM report_spam r WHERE r.time_report BETWEEN :dateStart AND :dateFinish")
+    @Query("SELECT r FROM ReportSpam r WHERE r.timeReport BETWEEN :dateStart AND :dateFinish")
     List<ReportSpam> filterByTime(Date dateStart, Date dateFinish);
 
-    @Query("SELECT r FROM report_spam r WHERE r.groupName LIKE %:searchName%")
-    List<GroupChat> filterName(@Param("searchName") String searchName);
+   // @Query("SELECT r FROM ReportSpam r WHERE r.groupName LIKE %:searchName%")
+  //  List<GroupChat> filterName(@Param("searchName") String searchName);
 }

@@ -12,12 +12,12 @@ public class ReportSpamServiceImpl implements ReportSpamService {
 
     @Override
     public List<ReportSpam> sortOrderByName() {
-        return reportSpamRepository.findAllByOrderByNameAsc();
+        return null;//reportSpamRepository.findAllByOrderByNameAsc();
     }
 
     @Override
     public List<ReportSpam> sortOrderByCreateDate() {
-        return reportSpamRepository.findAllByOrderByNameAsc();
+        return null;//reportSpamRepository.findAllByOrderByNameAsc();
     }
 
     @Override

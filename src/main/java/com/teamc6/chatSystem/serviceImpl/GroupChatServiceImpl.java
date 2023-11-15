@@ -23,12 +23,13 @@ public class GroupChatServiceImpl implements GroupChatService {
 
     @Override
     public List<GroupChat> sortByName() {
-        return groupChatRepository.findAllByOrderByNameAsc();
+    //    return groupChatRepository.findAllByOrderByNameAsc();
+        return null;
     }
 
     @Override
     public List<GroupChat> sortByCreateDay() {
-        return groupChatRepository.findAllByOrderByCreateDateAsc();
+        return null ;//groupChatRepository.findAllByOrderByCreateDateAsc();
     }
 
     @Override
