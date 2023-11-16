@@ -4,9 +4,11 @@ import com.teamc6.chatSystem.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     //there are some method to access database, you can click on super class to see...
     //if you want to custom or add method you can use @Query annotation with JPQL syntax ...

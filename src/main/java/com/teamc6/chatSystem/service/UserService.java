@@ -9,7 +9,7 @@ import java.util.Set;
 public interface UserService {
     User save(User u);
     List<User> findAll();
-    User updatePassWord(User u, String passWord);
+    User update(User u, Long id);
     User findById(Long ID);
     User findByUserName(String userName);
     Boolean delete(User u);
