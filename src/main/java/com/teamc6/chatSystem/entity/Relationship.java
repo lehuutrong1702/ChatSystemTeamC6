@@ -21,9 +21,14 @@ public class Relationship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id ;
 
+    public Relationship(String name, Set<User> users) {
+        this.name = name;
+        this.users = users;
+    }
+
     @Column(name="relationship_name")
     private String name;
 
     @ManyToMany(mappedBy = ("relationships"), fetch = FetchType.EAGER)
-    private Set<User> users;
+    private Set<User>users ;
 }

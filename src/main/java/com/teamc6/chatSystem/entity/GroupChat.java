@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name="group_chat")
 public class GroupChat {
-
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +27,8 @@ public class GroupChat {
     @Column(name="time_create")
     Date timeCreate;
 
-
     @ManyToMany(mappedBy = "groups",fetch = FetchType.EAGER)
     private Set<User> users ;
-
 
     @ManyToMany(mappedBy = "groupAdmins",fetch = FetchType.EAGER)
     private Set<User> admins;
