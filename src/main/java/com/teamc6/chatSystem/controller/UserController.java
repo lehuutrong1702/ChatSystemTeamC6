@@ -38,6 +38,7 @@ public class UserController {
     }
     @GetMapping("/search")
     public ResponseEntity<User> findByUsername(@RequestParam(value = "username",defaultValue = "") String username){
+       // userService.findByUserName(username).getUserActiveSessions();
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
@@ -47,12 +48,12 @@ public class UserController {
 
     }
 
-    @PutMapping()
-    public ResponseEntity<User> updatePassword(@RequestParam(value = "newPassword",defaultValue = "") String newPassword,
+    @PutMapping("{id}")
+    public ResponseEntity<User> updatePassword( @PathVariable("id")Long id,
                                                @RequestBody User u){
-        return new ResponseEntity<User>(userService.updatePassWord(u,newPassword),HttpStatus.OK);
-    }
 
+        return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
+    }
 
 
 }

@@ -9,6 +9,7 @@ import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
@@ -37,14 +39,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updatePassWord(User u, String passWord) {
-        var optional = userRepository.findById(u.getUserId());
+    public User update(User u, Long id) {
+        var optional = userRepository.findById(id);
         if(!optional.isPresent())
         {
             throw new ResourceNotFoundException("User", "user", u.getUserId());
         }
-        u.setPassword(passWord);
-        return userRepository.saveAndFlush(u);
+        User existUser = optional.get();
+        existUser.setFullName(u.getFullName());
+        existUser.setPassword(u.getPassword());
+        existUser.setUserName(u.getUserName());
+        existUser.setEmail(u.getEmail());
+        existUser.setBirthDay(u.getBirthDay());
+
+        return userRepository.saveAndFlush(existUser);
     }
 
     @Override
@@ -54,10 +62,12 @@ public class UserServiceImpl implements UserService {
         {
             throw new ResourceNotFoundException("User", "user: ", ID);
         }
+//        System.out.println(optional.get().getRelationships().toString());
         return optional.get();
     }
 
     @Override
+
     public User findByUserName(String userName) {
         Optional<User> optional = userRepository.findByUsername(userName);
         if(!optional.isPresent())
@@ -65,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
             throw new ResourceNotFoundException("User", "User Name: ", userName);
         }
+
         return optional.get();
     }
 

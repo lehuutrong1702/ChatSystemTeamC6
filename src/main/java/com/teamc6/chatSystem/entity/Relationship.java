@@ -24,6 +24,6 @@ public class Relationship {
     @Column(name="relationship_name")
     private String name;
 
-    @ManyToMany(mappedBy = ("relationships"), fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = ("relationships"))
     private Set<User> users;
 }

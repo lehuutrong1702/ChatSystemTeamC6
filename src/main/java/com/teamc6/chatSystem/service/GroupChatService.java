@@ -14,7 +14,9 @@ public interface GroupChatService {
     Set<User> listAdmin(GroupChat groupChat);
 
     GroupChat findByName(String name);
-
+    GroupChat save(GroupChat g);
     GroupChat findById(Long ID);
     void updateNameGroup(GroupChat groupChat, String name);
+
+    GroupChat addMember(Long groupID, Long memberId);
 }
