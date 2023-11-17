@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class GroupChatController {
     private GroupChatService groupChatService;
     @PostMapping()
-    public ResponseEntity<GroupChat> addUser(@RequestBody GroupChat g){
+    public ResponseEntity<GroupChat> addGroup(@RequestBody GroupChat g){
         return new ResponseEntity<GroupChat>(groupChatService.save(g), HttpStatus.CREATED);
     }
 
