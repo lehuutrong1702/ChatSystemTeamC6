@@ -37,6 +37,13 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("SELECT u FROM User u WHERE u.userName LIKE %:searchName% AND u.timeRegister BETWEEN :dateStart AND :dateFinish")
     List<User> filterByNameNewRegister(Date dateStart, Date dateFinish, @Param("searchName") String name);
+
+    @Query("SELECT MONTH(u.timeRegister) as month, COUNT(u) as quantity " +
+            "FROM User u " +
+            "WHERE YEAR(u.timeRegister) = :year " +
+            "GROUP BY MONTH(u.timeRegister)")
+    List<Object[]> getRegistrationCountByMonthInYear(@Param("year") int year);
+
     // ...
     //We can use also native SQL to define our query.
     // All we have to do is set the value of the nativeQuery attribute to true
