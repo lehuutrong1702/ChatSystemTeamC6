@@ -8,7 +8,7 @@ class ChatSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
-		//haha
+		//test commit
 	}
 
 }
