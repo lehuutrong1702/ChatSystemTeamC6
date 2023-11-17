@@ -1,5 +1,6 @@
 package com.teamc6.chatSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name="group_chat")
 public class GroupChat {
+
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +29,19 @@ public class GroupChat {
     @Column(name="time_create")
     Date timeCreate;
 
-    @ManyToMany(mappedBy = "groups",fetch = FetchType.EAGER)
-    private Set<User> users ;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="user_group",
+            joinColumns = {@JoinColumn(name="group_id")},
+            inverseJoinColumns = {@JoinColumn(name="user_id")}
+    )
+    private Set<User> members ;
 
-    @ManyToMany(mappedBy = "groupAdmins",fetch = FetchType.EAGER)
+
+    public void addMember(User u){
+        members.add(u);
+    }
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "groupAdmins",fetch = FetchType.LAZY)
     private Set<User> admins;
 }
