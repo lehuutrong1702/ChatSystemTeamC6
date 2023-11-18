@@ -1,0 +1,6 @@
+id, birth_day, full_name, gender, password, user_name
+1, 1990-05-15, John Doe, 1, p@ssw0rd1, johndoe
+2, 1985-09-20, Jane Smith, 0, p@ssw0rd2, janesmith
+3, 1992-07-10, Alex Johnson, 1, p@ssw0rd3, alexjohnson
+4, 1988-12-03, Sarah Wilson, 0, p@ssw0rd4, sarahwilson
+5, 1995-02-28, Michael Brown, 1, p@ssw0rd5, michaelbrown
