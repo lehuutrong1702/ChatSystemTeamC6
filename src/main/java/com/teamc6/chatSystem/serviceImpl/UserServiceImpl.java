@@ -8,6 +8,8 @@ import com.teamc6.chatSystem.exception.ResourceNotFoundException;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +39,10 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
     @Override
     public User update(User u, Long id) {
         var optional = userRepository.findById(id);

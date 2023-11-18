@@ -5,7 +5,10 @@ import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -31,7 +34,10 @@ public class UserController {
     public List<User> findAll(){
         return userService.findAll();
     }
-
+    @GetMapping("/users")
+    public Page<User> findAllUsers(@PageableDefault(value = 2, page = 0) Pageable pageable) {
+        return userService.findAll(pageable);
+    }
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
