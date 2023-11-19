@@ -5,12 +5,15 @@ import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.RelationshipService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Service
 public class RelationshipServiceImpl implements RelationshipService {
     private UserRepository userRepository;
     @Override
@@ -34,6 +37,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public Relationship addFriend(Long ID1, Long ID2) {
+        System.out.println(ID1);
         var optional1 = userRepository.findById(ID1);
         if(!optional1.isPresent())
         {

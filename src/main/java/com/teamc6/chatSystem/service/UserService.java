@@ -14,8 +14,8 @@ public interface UserService {
     User findByUserName(String userName);
     Boolean delete(User u);
 
-
     Boolean deleteById(Long ID);
 
+    List<User> pagination(int page, int perpage);
 
 }

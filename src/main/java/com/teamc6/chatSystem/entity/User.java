@@ -43,6 +43,14 @@ public class User {
     @Column()
     private String password;
 
+    public User(String fullName, Date birthDay, Boolean gender, String email, String userName, String password){
+        this.fullName = fullName;
+        this.birthDay = birthDay;
+        this.gender = gender;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+    }
     @ManyToMany(mappedBy = "blockers" , cascade = CascadeType.ALL)
     private Set<User> blocking ;
 
