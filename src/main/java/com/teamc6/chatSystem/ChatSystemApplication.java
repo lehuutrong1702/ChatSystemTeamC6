@@ -21,14 +21,12 @@ import java.util.Set;
 
 @SpringBootApplication
 public class ChatSystemApplication{
-	private UserService userService;
+
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(ChatSystemApplication.class, args);
-		UserService userService = context.getBean(UserService.class);
 
-		Date date = new Date(30/04/2003);
-		User u = new User("Phan Van Nguyen", date, true, "nguyenpv@gmail.com", "nguyle", "30042003");
-		userService.save(u);
+
+
 		//SpringApplication.run(ChatSystemApplication.class, args);
 
 	}

@@ -2,8 +2,10 @@ package com.teamc6.chatSystem.controller;
 
 
 import com.teamc6.chatSystem.entity.GroupChat;
+import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
+import com.teamc6.chatSystem.service.RelationshipService;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +28,11 @@ import java.util.Set;
 public class UserController {
 
     private  UserService userService;
-
+    private PasswordEncoder passwordEncoder;
+    private RelationshipService relationshipService;
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
+           u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
     }
 
@@ -35,7 +40,7 @@ public class UserController {
     public List<User> findAll(){
         return userService.findAll();
     }
-    @GetMapping("/users")
+    @GetMapping()
     public Page<User> findAllUsers(@PageableDefault(value = 2, page = 0) Pageable pageable) {
         return userService.findAll(pageable);
     }
@@ -72,5 +77,12 @@ public class UserController {
     public Set<UserActiveSession> findAllUserActiveSessions(@PathVariable("id") Long id){
         return userService.findAllUserActiveSessions(id);
     }
+
+    @PostMapping("{id1}/friends/{id2}")
+    public ResponseEntity<Relationship> addFriend(@PathVariable ("id1") Long id1,@PathVariable("id2") Long id2){
+        return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
+    }
+
+
 
 }

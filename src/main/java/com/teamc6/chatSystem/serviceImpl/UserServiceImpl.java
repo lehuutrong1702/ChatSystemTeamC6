@@ -6,6 +6,7 @@ import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
 import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
+import com.teamc6.chatSystem.repository.RelationshipRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -145,6 +146,7 @@ public class UserServiceImpl implements UserService {
         friendList.remove(optional.get());
         return friendList;
     }
+
 
 
 
