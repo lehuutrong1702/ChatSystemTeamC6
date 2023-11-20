@@ -44,6 +44,13 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "GROUP BY MONTH(u.timeRegister)")
     List<Object[]> getRegistrationCountByMonthInYear(@Param("year") int year);
 
+    @Query("SELECT u FROM User u WHERE u.userId >= :startId AND u.userId <= :endId")
+    List<User> findIdsInRange(@Param("startId") Long startId, @Param("endId") Long endId);
+
+//    @Query("SELECT u FROM (SELECT u, ROW_NUMBER() OVER (ORDER BY u.userId) AS RowNum FROM User u) AS uWithRowNum " +
+//            "WHERE uWithRowNum.RowNum >= :n AND uWithRowNum.RowNum < :m " +
+//            "ORDER BY uWithRowNum.RowNum")
+//    List<User> findUsersByRow(int n, int m);
     // ...
     //We can use also native SQL to define our query.
     // All we have to do is set the value of the nativeQuery attribute to true

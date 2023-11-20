@@ -24,7 +24,6 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
-
     public User save(User u) {
         var optional = userRepository.findById(u.getUserId());
 
@@ -104,6 +103,11 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.delete(optional.get());
         return true;
+    }
+
+    @Override
+    public List<User> pagination(int page, int perpage) {
+        return null;
     }
 
 
