@@ -1,5 +1,6 @@
 package com.teamc6.chatSystem.serviceImpl;
 
+import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Transactional
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+
 
     public User save(User u) {
         var optional = userRepository.findById(u.getUserId());
@@ -109,6 +111,45 @@ public class UserServiceImpl implements UserService {
     public List<User> pagination(int page, int perpage) {
         return null;
     }
+
+    @Override
+    public Set<GroupChat> findAllGroups(Long ID) {
+        Optional<User> optional = userRepository.findById(ID);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user: ",ID);
+        }
+        return  optional.get().getGroups();
+    }
+
+    @Override
+    public Set<UserActiveSession> findAllUserActiveSessions(Long ID) {
+        Optional<User> optional = userRepository.findById(ID);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user: ",ID);
+        }
+        return  optional.get().getUserActiveSessions();
+    }
+    @Override
+    public Set<User> findAllFriends(Long ID) {
+        var optional = userRepository.findById(ID);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID);
+        }
+        Set<Relationship> relationshipSet = optional.get().getRelationships();
+        Set<User> friendList = new HashSet<User>();
+        for(Relationship row: relationshipSet)
+        {
+            if(row.getName() == "friend"){
+                friendList.addAll(row.getUsers());
+            }
+        }
+        friendList.remove(optional.get());
+        return friendList;
+    }
+
 
 
 }

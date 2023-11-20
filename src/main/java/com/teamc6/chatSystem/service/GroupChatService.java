@@ -10,8 +10,8 @@ public interface GroupChatService {
     List<GroupChat> filterName(String name);
     List<GroupChat> sortByName();
     List<GroupChat> sortByCreateDay();
-    Set<User> listMember(GroupChat groupChat);
-    Set<User> listAdmin(GroupChat groupChat);
+    Set<User> findAllMember(Long id);
+    Set<User> findAllAdmin(Long id);
 
     GroupChat findByName(String name);
     GroupChat save(GroupChat g);

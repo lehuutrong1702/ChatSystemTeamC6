@@ -17,7 +17,6 @@ import java.util.Set;
 @Entity
 @Table(name="group_chat")
 public class GroupChat {
-
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +28,13 @@ public class GroupChat {
     @Column(name="time_create")
     Date timeCreate;
 
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="user_group",
             joinColumns = {@JoinColumn(name="group_id")},
             inverseJoinColumns = {@JoinColumn(name="user_id")}
     )
+    @JsonIgnore
     private Set<User> members ;
 
 
@@ -42,6 +43,10 @@ public class GroupChat {
     }
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "groupAdmins",fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="admin_group",
+            joinColumns = {@JoinColumn(name="group_id")},
+            inverseJoinColumns = {@JoinColumn(name="user_id")}
+    )
     private Set<User> admins;
 }

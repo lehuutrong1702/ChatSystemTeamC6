@@ -29,6 +29,12 @@ public class Relationship {
     @Column(name="relationship_name")
     private String name;
 
-    @ManyToMany(mappedBy = ("relationships"), fetch = FetchType.EAGER)
-    private Set<User>users ;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="user_relationship",
+            joinColumns = {@JoinColumn(name="relationship_id")},
+            inverseJoinColumns = {@JoinColumn(name="user_id")}
+    )
+    private Set<User> users;
+
 }

@@ -20,5 +20,5 @@ public interface GroupChatRepository extends JpaRepository<GroupChat,Long> {
     List<GroupChat> sortOrderByCreateDateAsc();
 
     @Query("SELECT g FROM GroupChat g WHERE g.groupName = :name")
-    Optional<GroupChat> findByUsername(@Param("name") String username);
+    Optional<GroupChat> findByName(@Param("name") String username);
 }

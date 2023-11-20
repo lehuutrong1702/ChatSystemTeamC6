@@ -38,21 +38,21 @@ public class GroupChatServiceImpl implements GroupChatService {
     }
 
     @Override
-    public Set<User> listMember(GroupChat groupChat) {
-        Optional<GroupChat> optional = groupChatRepository.findById(groupChat.getId());
+    public Set<User> findAllMember(Long id) {
+        Optional<GroupChat> optional = groupChatRepository.findById(id);
         if(!optional.isPresent())
         {
-            throw new ResourceNotFoundException("GroupChat", "Group chat", groupChat.getId());
+            throw new ResourceNotFoundException("GroupChat", "Group chat", id);
         }
         return optional.get().getMembers();
     }
 
     @Override
-    public Set<User> listAdmin(GroupChat groupChat) {
-        Optional<GroupChat> optional = groupChatRepository.findById(groupChat.getId());
+    public Set<User> findAllAdmin(Long id) {
+        Optional<GroupChat> optional = groupChatRepository.findById(id);
         if(!optional.isPresent())
         {
-            throw new ResourceNotFoundException("GroupChat", "Group chat", groupChat.getId());
+            throw new ResourceNotFoundException("GroupChat", "Group chat", id);
         }
         return optional.get().getAdmins();
     }
@@ -92,7 +92,7 @@ public class GroupChatServiceImpl implements GroupChatService {
     @Override
     public GroupChat findByName(String name)
     {
-        Optional<GroupChat> optional = groupChatRepository.findByUsername(name);
+        Optional<GroupChat> optional = groupChatRepository.findByName(name);
         if(!optional.isPresent())
         {
             throw new ResourceNotFoundException("GroupChat", "Group chat name: ", name);

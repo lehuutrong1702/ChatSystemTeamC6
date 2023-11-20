@@ -1,14 +1,19 @@
 package com.teamc6.chatSystem.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
+
+
 @Entity
 @Table(name="user")
 @AllArgsConstructor
@@ -37,21 +42,15 @@ public class User {
     @Column(name="time_register")
     private Date timeRegister;
 
-    @Column()
+    @Column(unique = true)
     private String userName;
 
     @Column()
     private String password;
 
-    public User(String fullName, Date birthDay, Boolean gender, String email, String userName, String password){
-        this.fullName = fullName;
-        this.birthDay = birthDay;
-        this.gender = gender;
-        this.email = email;
-        this.userName = userName;
-        this.password = password;
-    }
-    @ManyToMany(mappedBy = "blockers" , cascade = CascadeType.ALL)
+
+    @ManyToMany(mappedBy = "blockers" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<User> blocking ;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -59,33 +58,29 @@ public class User {
             joinColumns = {@JoinColumn(name="user_block_id")},
             inverseJoinColumns = {@JoinColumn(name="user_blocked_id")}
     )
+    @JsonIgnore
     private Set<User> blockers;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_group",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="group_id")}
-    )
+
+
+    @ManyToMany(mappedBy = "members")
+    @JsonIgnore
     private Set<GroupChat> groups ;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="admin_group",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="group_id")}
-    )
-    private Set<GroupChat> groupAdmins;
+    @ManyToMany(mappedBy = "admins")
+    @JsonIgnore
+    private Set<GroupChat> groupAdmins ;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_relationship",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="relationship_id")}
-    )
+    @ManyToMany(mappedBy ="users" ,cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Relationship> relationships ;
 
 
     @OneToMany(mappedBy = "reportUser")
+    @JsonIgnore
     private Set<ReportSpam> reportSpams ;
-    @OneToMany(mappedBy = "sessionUser")
-    private Set<UserActiveSession> userActiveSessions;
 
+    @OneToMany(mappedBy = "sessionUser")
+    @JsonIgnore
+    private Set<UserActiveSession> userActiveSessions;
 }

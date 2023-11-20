@@ -3,6 +3,7 @@ package com.teamc6.chatSystem.serviceImpl;
 import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
+import com.teamc6.chatSystem.repository.RelationshipRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.RelationshipService;
 import lombok.AllArgsConstructor;
@@ -14,8 +15,10 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class RelationshipServiceImpl implements RelationshipService {
     private UserRepository userRepository;
+    private RelationshipRepository relationshipRepository;
     @Override
     public Set<User> listFriend(Long ID) {
         var optional = userRepository.findById(ID);
@@ -37,7 +40,6 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public Relationship addFriend(Long ID1, Long ID2) {
-        System.out.println(ID1);
         var optional1 = userRepository.findById(ID1);
         if(!optional1.isPresent())
         {
@@ -52,6 +54,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         friendSet.add(optional1.get());
         friendSet.add(optional2.get());
         Relationship relationship = new Relationship("friend",friendSet);
+        relationshipRepository.save(relationship);
         return relationship;
     }
 
