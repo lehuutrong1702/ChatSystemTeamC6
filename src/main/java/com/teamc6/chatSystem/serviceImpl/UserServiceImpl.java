@@ -107,10 +107,6 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    @Override
-    public List<User> pagination(int page, int perpage) {
-        return null;
-    }
 
     @Override
     public Set<GroupChat> findAllGroups(Long ID) {
