@@ -3,16 +3,22 @@ package com.teamc6.chatSystem.serviceImpl;
 import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
+import com.teamc6.chatSystem.repository.RelationshipRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.RelationshipService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Service
+@AllArgsConstructor
 public class RelationshipServiceImpl implements RelationshipService {
     private UserRepository userRepository;
+    private RelationshipRepository relationshipRepository;
     @Override
     public Set<User> listFriend(Long ID) {
         var optional = userRepository.findById(ID);
@@ -48,6 +54,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         friendSet.add(optional1.get());
         friendSet.add(optional2.get());
         Relationship relationship = new Relationship("friend",friendSet);
+        relationshipRepository.save(relationship);
         return relationship;
     }
 

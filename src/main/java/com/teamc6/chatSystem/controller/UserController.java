@@ -1,6 +1,7 @@
 package com.teamc6.chatSystem.controller;
 
 
+import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
 import com.teamc6.chatSystem.service.UserService;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @AllArgsConstructor
 
 public class UserController {
@@ -41,19 +42,29 @@ public class UserController {
        // userService.findByUserName(username).getUserActiveSessions();
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
-
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") long id){
         return new ResponseEntity<Boolean>(userService.deleteById(id),HttpStatus.OK);
-
     }
-
     @PutMapping("{id}")
-    public ResponseEntity<User> updatePassword( @PathVariable("id")Long id,
+    public ResponseEntity<User> update( @PathVariable("id")Long id,
                                                @RequestBody User u){
-
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
+    @GetMapping("{id}/groups")
+    public Set<GroupChat> findALlGroup(@PathVariable ("id") Long id){
+        return userService.findAllGroups(id);
+    }
+
+    @GetMapping("{id}/friends")
+    public Set<User> findAllFriends(@PathVariable("id") Long id){
+        return userService.findAllFriends(id);
+    }
+
+    @GetMapping("{id}/user-active-sessions")
+    public Set<UserActiveSession> findAllUserActiveSessions(@PathVariable("id") Long id){
+        return userService.findAllUserActiveSessions(id);
+    }
 
 }

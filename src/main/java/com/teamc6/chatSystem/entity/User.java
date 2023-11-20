@@ -48,12 +48,9 @@ public class User {
     @Column()
     private String password;
 
-<<<<<<< HEAD
+
     @ManyToMany(mappedBy = "blockers" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
-=======
-    @ManyToMany(mappedBy = "blockers" , cascade = CascadeType.ALL)
->>>>>>> 9c0df8543a39c9d5f1c9f1f4db83debd03c5181e
     private Set<User> blocking ;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -64,33 +61,17 @@ public class User {
     @JsonIgnore
     private Set<User> blockers;
 
-<<<<<<< HEAD
 
 
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
-=======
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_group",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="group_id")}
-    )
->>>>>>> 9c0df8543a39c9d5f1c9f1f4db83debd03c5181e
     private Set<GroupChat> groups ;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="admin_group",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="group_id")}
-    )
+    @ManyToMany(mappedBy = "admins")
     @JsonIgnore
     private Set<GroupChat> groupAdmins ;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_relationship",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="relationship_id")}
-    )
+    @ManyToMany(mappedBy ="users" ,cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Relationship> relationships ;
 
@@ -102,10 +83,4 @@ public class User {
     @OneToMany(mappedBy = "sessionUser")
     @JsonIgnore
     private Set<UserActiveSession> userActiveSessions;
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 9c0df8543a39c9d5f1c9f1f4db83debd03c5181e
 }

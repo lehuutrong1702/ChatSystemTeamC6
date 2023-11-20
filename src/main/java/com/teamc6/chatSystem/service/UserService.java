@@ -1,5 +1,6 @@
 package com.teamc6.chatSystem.service;
 
+import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
 
@@ -14,8 +15,14 @@ public interface UserService {
     User findByUserName(String userName);
     Boolean delete(User u);
 
+    Set<GroupChat> findAllGroups(Long ID);
+
+    Set<UserActiveSession> findAllUserActiveSessions(Long ID);
 
     Boolean deleteById(Long ID);
+
+    Set<User> findAllFriends(Long Id);
+
 
 
 }

@@ -28,12 +28,13 @@ public class GroupChat {
     @Column(name="time_create")
     Date timeCreate;
 
-<<<<<<< HEAD
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="user_group",
             joinColumns = {@JoinColumn(name="group_id")},
             inverseJoinColumns = {@JoinColumn(name="user_id")}
     )
+    @JsonIgnore
     private Set<User> members ;
 
 
@@ -42,12 +43,10 @@ public class GroupChat {
     }
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "groupAdmins",fetch = FetchType.LAZY)
-=======
-    @ManyToMany(mappedBy = "groups",fetch = FetchType.EAGER)
-    private Set<User> users ;
-
-    @ManyToMany(mappedBy = "groupAdmins",fetch = FetchType.EAGER)
->>>>>>> 9c0df8543a39c9d5f1c9f1f4db83debd03c5181e
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="admin_group",
+            joinColumns = {@JoinColumn(name="group_id")},
+            inverseJoinColumns = {@JoinColumn(name="user_id")}
+    )
     private Set<User> admins;
 }
