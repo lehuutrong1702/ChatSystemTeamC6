@@ -147,7 +147,9 @@ public class UserServiceImpl implements UserService {
         return friendList;
     }
 
-
-
-
+    @Override
+    public Page<User> filterByName(String name, Pageable pageable) {
+//       return userRepository.findByUsername(name,pageable);
+        return userRepository.findByUsername(name,pageable);
+    }
 }
