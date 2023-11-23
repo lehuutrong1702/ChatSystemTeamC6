@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
-                .authorizeRequests(authorize -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET,"api/v1/users").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"api/v1/users/delete/id={id}").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"api/v1/users/update/id={id}").hasAuthority("ADMIN")
@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                .httpBasic(withDefaults()).csrf().disable().build();
+                .httpBasic(withDefaults()).csrf(AbstractHttpConfigurer::disable).build();
 
     }
 }
