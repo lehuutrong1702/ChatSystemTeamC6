@@ -15,8 +15,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
-
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         System.out.println("encode");
