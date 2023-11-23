@@ -18,28 +18,28 @@ import java.util.Set;
 public class GroupChatController {
     private GroupChatService groupChatService;
 
-    @GetMapping("{id}")
+    @GetMapping("/search/id={id}")
     public ResponseEntity<GroupChat> findById(@PathVariable("id") Long id){
         return new ResponseEntity<>(groupChatService.findById(id),HttpStatus.OK);
     }
 
-    @GetMapping("{id}/members")
+    @GetMapping(":{id}/members")
     public Set<User> findAllMembers(@PathVariable("id") Long id){
         return groupChatService.findAllMember(id);
     }
 
-    @GetMapping("{id}/admins")
+    @GetMapping(":{id}/admins")
     public Set<User> findAllAdmins(@PathVariable("id") Long id){
         return groupChatService.findAllMember(id);
     }
 
-    @PostMapping()
+    @PostMapping("/add")
     public ResponseEntity<GroupChat> addGroup(@RequestBody GroupChat g){
         return new ResponseEntity<GroupChat>(groupChatService.save(g), HttpStatus.CREATED);
     }
 
-   @PutMapping("/{group_id}/members/{member_id}")
-   public   ResponseEntity<GroupChat> addMembers(@PathVariable("group_id") long groupID, @PathVariable("member_id") long memberId) {
+   @PutMapping(":{id}/add-members/{member_id}")
+   public   ResponseEntity<GroupChat> addMembers(@PathVariable("id") long groupID, @PathVariable("member_id") long memberId) {
         return new ResponseEntity<GroupChat>(groupChatService.addMember(groupID,memberId),HttpStatus.ACCEPTED);
     }
 }

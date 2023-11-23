@@ -32,7 +32,7 @@ public class UserController {
     private  UserService userService;
     private PasswordEncoder passwordEncoder;
     private RelationshipService relationshipService;
-    @PostMapping()
+    @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody User u){
            u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
@@ -49,56 +49,55 @@ public class UserController {
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.findAll(pageable);
     }
-    @GetMapping("{id}")
+    @GetMapping("/search/id={id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
     }
-    @GetMapping("/search")
-    public ResponseEntity<User> findByUsername(@RequestParam(value = "username",defaultValue = "") String username){
+    @GetMapping("/search/username={username}")
+    public ResponseEntity<User> findByUsername(
+            @PathVariable("username") String username){
        // userService.findByUserName(username).getUserActiveSessions();
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
-    @GetMapping("/filter/{username}")
+    @GetMapping("/filter/username")
     public Page<User> filterByUsername(
-            @PathVariable("username") String username,
+            @RequestParam(value = "username" ,defaultValue = "") String username,
             @RequestParam(value = "page" ,defaultValue = "0") int page,
-                                   @RequestParam(value = "size",defaultValue = "5") int perPage){
+            @RequestParam(value = "size",defaultValue = "5") int perPage){
 
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.filterByName(username,pageable);
     }
-    @DeleteMapping("{id}")
+
+    @DeleteMapping("/delete/id={id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") long id){
         return new ResponseEntity<Boolean>(userService.deleteById(id),HttpStatus.OK);
     }
-    @PutMapping("{id}")
+    @PutMapping("/update/id={id}")
     public ResponseEntity<User> update( @PathVariable("id")Long id,
                                                @RequestBody User u){
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
-    @GetMapping("{id}/groups")
-    public Set<GroupChat> findALlGroup(@PathVariable ("id") Long id){
+    @GetMapping(":{id}/groups")
+    public Set<GroupChat> findAllGroup(@PathVariable ("id") Long id){
         return userService.findAllGroups(id);
     }
 
-    @GetMapping("{id}/friends")
+    @GetMapping(":{id}/friends")
     public Set<User> findAllFriends(@PathVariable("id") Long id){
         return userService.findAllFriends(id);
     }
 
-    @GetMapping("{id}/user-active-sessions")
+    @GetMapping(":{id}/user-active-sessions")
     public Set<UserActiveSession> findAllUserActiveSessions(@PathVariable("id") Long id){
         return userService.findAllUserActiveSessions(id);
     }
 
-    @PostMapping("{id1}/friends/{id2}")
+    @PostMapping(":{id1}/add-friend/{id2}")
     public ResponseEntity<Relationship> addFriend(@PathVariable ("id1") Long id1,
                                                   @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
     }
-
-
-
 }
