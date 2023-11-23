@@ -23,14 +23,14 @@ import java.util.Set;
 public class User {
 
     @Id
-    @Column(name="user_id")
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
-    @Column(name="full_name")
+    @Column(name = "full_name")
     private String fullName;
 
-    @Column(name="birthday")
+    @Column(name = "birthday")
     private Date birthDay;
 
     @Column()
@@ -39,7 +39,7 @@ public class User {
     @Column()
     private String email;
 
-    @Column(name="time_register")
+    @Column(name = "time_register")
     private Date timeRegister;
 
     @Column(unique = true)
@@ -49,38 +49,44 @@ public class User {
     private String password;
 
 
-    @ManyToMany(mappedBy = "blockers" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "blockers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<User> blocking ;
+    private Set<User> blocking;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name= "Block",
-            joinColumns = {@JoinColumn(name="user_block_id")},
-            inverseJoinColumns = {@JoinColumn(name="user_blocked_id")}
+    @JoinTable(name = "Block",
+            joinColumns = {@JoinColumn(name = "user_block_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_blocked_id")}
     )
     @JsonIgnore
     private Set<User> blockers;
 
 
-
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
-    private Set<GroupChat> groups ;
+    private Set<GroupChat> groups;
 
     @ManyToMany(mappedBy = "admins")
     @JsonIgnore
-    private Set<GroupChat> groupAdmins ;
+    private Set<GroupChat> groupAdmins;
 
-    @ManyToMany(mappedBy ="users" ,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Relationship> relationships ;
+    private Set<Relationship> relationships;
 
 
     @OneToMany(mappedBy = "reportUser")
     @JsonIgnore
-    private Set<ReportSpam> reportSpams ;
+    private Set<ReportSpam> reportSpams;
 
     @OneToMany(mappedBy = "sessionUser")
     @JsonIgnore
     private Set<UserActiveSession> userActiveSessions;
+
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "active")
+    private boolean active = true;
 }
+

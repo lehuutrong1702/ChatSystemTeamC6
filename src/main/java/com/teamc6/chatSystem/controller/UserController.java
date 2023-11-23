@@ -2,16 +2,21 @@ package com.teamc6.chatSystem.controller;
 
 
 import com.teamc6.chatSystem.entity.GroupChat;
+import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
+import com.teamc6.chatSystem.service.RelationshipService;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,18 +30,23 @@ import java.util.Set;
 public class UserController {
 
     private  UserService userService;
-
+    private PasswordEncoder passwordEncoder;
+    private RelationshipService relationshipService;
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
+           u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
     }
 
+//    @GetMapping()
+//    public List<User> findAll(){
+//        return userService.findAll();
+//    }
     @GetMapping()
-    public List<User> findAll(){
-        return userService.findAll();
-    }
-    @GetMapping("/users")
-    public Page<User> findAllUsers(@PageableDefault(value = 2, page = 0) Pageable pageable) {
+    public Page<User> findAllUsers(@RequestParam(value = "page" ,defaultValue = "0") int page,
+                                   @RequestParam(value = "size",defaultValue = "5") int perPage) {
+
+        Pageable pageable = PageRequest.of(page,perPage);
         return userService.findAll(pageable);
     }
     @GetMapping("{id}")
@@ -47,6 +57,16 @@ public class UserController {
     public ResponseEntity<User> findByUsername(@RequestParam(value = "username",defaultValue = "") String username){
        // userService.findByUserName(username).getUserActiveSessions();
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
+    }
+
+    @GetMapping("/filter/{username}")
+    public Page<User> filterByUsername(
+            @PathVariable("username") String username,
+            @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                   @RequestParam(value = "size",defaultValue = "5") int perPage){
+
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.filterByName(username,pageable);
     }
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") long id){
@@ -72,5 +92,13 @@ public class UserController {
     public Set<UserActiveSession> findAllUserActiveSessions(@PathVariable("id") Long id){
         return userService.findAllUserActiveSessions(id);
     }
+
+    @PostMapping("{id1}/friends/{id2}")
+    public ResponseEntity<Relationship> addFriend(@PathVariable ("id1") Long id1,
+                                                  @PathVariable("id2") Long id2){
+        return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
+    }
+
+
 
 }

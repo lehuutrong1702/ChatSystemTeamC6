@@ -6,6 +6,7 @@ import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
 import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
+import com.teamc6.chatSystem.repository.RelationshipRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -146,6 +147,9 @@ public class UserServiceImpl implements UserService {
         return friendList;
     }
 
-
-
+    @Override
+    public Page<User> filterByName(String name, Pageable pageable) {
+//       return userRepository.findByUsername(name,pageable);
+        return userRepository.findByUsername(name,pageable);
+    }
 }
