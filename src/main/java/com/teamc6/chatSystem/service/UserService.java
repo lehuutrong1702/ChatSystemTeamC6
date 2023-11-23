@@ -16,6 +16,9 @@ public interface UserService {
     User update(User u, Long id);
     User findById(Long ID);
     User findByUserName(String userName);
+
+    Page<User> filterByName(String name,Pageable pageable);
+
     Boolean delete(User u);
 
     Set<GroupChat> findAllGroups(Long ID);

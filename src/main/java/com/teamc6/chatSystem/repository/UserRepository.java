@@ -3,6 +3,8 @@ package com.teamc6.chatSystem.repository;
 import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.ReportSpam;
 import com.teamc6.chatSystem.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,8 +28,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> filterByTime(Date dateStart, Date dateFinish);
 
     @Query("SELECT u FROM User u WHERE u.userName LIKE %:searchName%")
-    List<User> filterName(@Param("searchName") String searchName);
+    List<User> filterByName(@Param("searchName") String searchName);
 
+    @Query("SELECT u FROM User u WHERE u.userName LIKE %:searchName%")
+    Page<User> findByUsername(@Param("searchName") String name, Pageable pageable);
 
     @Query("SELECT r FROM User r WHERE r.timeRegister BETWEEN :dateStart AND :dateFinish ORDER BY r.userName ASC")
     List<User> sortOrderByNameAscNewRegister(Date dateStart, Date dateFinish);
