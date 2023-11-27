@@ -49,7 +49,7 @@ public class UserController {
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.findAll(pageable);
     }
-    @GetMapping("/search/id={id}")
+    @GetMapping("/search/{id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
     }
@@ -70,32 +70,32 @@ public class UserController {
         return userService.filterByName(username,pageable);
     }
 
-    @DeleteMapping("/delete/id={id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") long id){
         return new ResponseEntity<Boolean>(userService.deleteById(id),HttpStatus.OK);
     }
-    @PutMapping("/update/id={id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> update( @PathVariable("id")Long id,
                                                @RequestBody User u){
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
-    @GetMapping(":{id}/groups")
+    @GetMapping("/{id}/groups")
     public Set<GroupChat> findAllGroup(@PathVariable ("id") Long id){
         return userService.findAllGroups(id);
     }
 
-    @GetMapping(":{id}/friends")
+    @GetMapping("/{id}/friends")
     public Set<User> findAllFriends(@PathVariable("id") Long id){
         return userService.findAllFriends(id);
     }
 
-    @GetMapping(":{id}/user-active-sessions")
+    @GetMapping("/{id}/user-active-sessions")
     public Set<UserActiveSession> findAllUserActiveSessions(@PathVariable("id") Long id){
         return userService.findAllUserActiveSessions(id);
     }
 
-    @PostMapping(":{id1}/add-friend/{id2}")
+    @PostMapping("/{id1}/add-friend/{id2}")
     public ResponseEntity<Relationship> addFriend(@PathVariable ("id1") Long id1,
                                                   @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
