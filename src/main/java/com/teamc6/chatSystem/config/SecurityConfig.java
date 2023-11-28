@@ -1,5 +1,7 @@
 package com.teamc6.chatSystem.config;
 
+import com.teamc6.chatSystem.api.GroupAPI;
+import com.teamc6.chatSystem.api.UserAPI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,22 +28,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET,"api/v1/users").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"api/v1/users/delete/{id}").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"api/v1/users/update/{id}").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"api/v1/users/{id}/groups").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.POST,"api/v1/users/{id1}/add-friend/{id2}").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.POST,"api/v1/users/add").permitAll()
+                        .requestMatchers(HttpMethod.GET, UserAPI.ALL).permitAll()
+                        .requestMatchers(HttpMethod.DELETE, UserAPI.DELETE).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, UserAPI.GROUPS).hasAuthority("USER")
+                        .requestMatchers(HttpMethod.POST, UserAPI.ADD_FRIENDS).hasAuthority("USER")
 
-//                        .requestMatchers(HttpMethod.GET,"api/v1/users/search/username={username}").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"api/v1/users/filter/username={username}").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"api/v1/users/search/id={id}").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"api/v1/users:{id}/friends").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"api/v1/users:{id}/user-active-sessions").permitAll()
-                        .requestMatchers(HttpMethod.GET,"api/v1/groups/search/{id}").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/members").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/admins").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"api/v1/groups/{id}/add-members/{member_id}").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.GET, GroupAPI.GET).hasAuthority("USER")
+                        .requestMatchers(HttpMethod.PUT,GroupAPI.ADD_MEMBER).hasAuthority("USER")
 
                         .anyRequest().authenticated()
                 )

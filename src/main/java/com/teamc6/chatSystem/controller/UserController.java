@@ -1,6 +1,7 @@
 package com.teamc6.chatSystem.controller;
 
 
+import com.teamc6.chatSystem.api.UserAPI;
 import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping(UserAPI.PATH)
 @AllArgsConstructor
 
 public class UserController {
@@ -32,7 +33,7 @@ public class UserController {
     private  UserService userService;
     private PasswordEncoder passwordEncoder;
     private RelationshipService relationshipService;
-    @PostMapping("/add")
+    @PostMapping(UserAPI.ADD)
     public ResponseEntity<User> addUser(@RequestBody User u){
            u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
@@ -42,25 +43,25 @@ public class UserController {
 //    public List<User> findAll(){
 //        return userService.findAll();
 //    }
-    @GetMapping()
+    @GetMapping(UserAPI.ALL)
     public Page<User> findAllUsers(@RequestParam(value = "page" ,defaultValue = "0") int page,
                                    @RequestParam(value = "size",defaultValue = "5") int perPage) {
 
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.findAll(pageable);
     }
-    @GetMapping("/search/{id}")
+    @GetMapping(UserAPI.GET)
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
     }
-    @GetMapping("/search/username={username}")
+    @GetMapping(UserAPI.SEARCH)
     public ResponseEntity<User> findByUsername(
-            @PathVariable("username") String username){
+            @RequestParam(value = "username" ,defaultValue = "") String username){
        // userService.findByUserName(username).getUserActiveSessions();
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
-    @GetMapping("/filter/username")
+    @GetMapping(UserAPI.FILTER_USERNAME)
     public Page<User> filterByUsername(
             @RequestParam(value = "username" ,defaultValue = "") String username,
             @RequestParam(value = "page" ,defaultValue = "0") int page,
@@ -70,32 +71,32 @@ public class UserController {
         return userService.filterByName(username,pageable);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping(UserAPI.DELETE)
     public ResponseEntity<Boolean> delete(@PathVariable("id") long id){
         return new ResponseEntity<Boolean>(userService.deleteById(id),HttpStatus.OK);
     }
-    @PutMapping("/update/{id}")
+    @PutMapping(UserAPI.UPDATE)
     public ResponseEntity<User> update( @PathVariable("id")Long id,
                                                @RequestBody User u){
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/groups")
+    @GetMapping(UserAPI.GROUPS)
     public Set<GroupChat> findAllGroup(@PathVariable ("id") Long id){
         return userService.findAllGroups(id);
     }
 
-    @GetMapping("/{id}/friends")
+    @GetMapping(UserAPI.FRIENDS)
     public Set<User> findAllFriends(@PathVariable("id") Long id){
         return userService.findAllFriends(id);
     }
 
-    @GetMapping("/{id}/user-active-sessions")
+    @GetMapping(UserAPI.SESSIONS)
     public Set<UserActiveSession> findAllUserActiveSessions(@PathVariable("id") Long id){
         return userService.findAllUserActiveSessions(id);
     }
 
-    @PostMapping("/{id1}/add-friend/{id2}")
+    @PostMapping(UserAPI.ADD_FRIENDS)
     public ResponseEntity<Relationship> addFriend(@PathVariable ("id1") Long id1,
                                                   @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
