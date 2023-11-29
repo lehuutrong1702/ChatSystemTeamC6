@@ -19,4 +19,6 @@ public interface GroupChatService {
     void updateNameGroup(GroupChat groupChat, String name);
 
     GroupChat addMember(Long groupID, Long memberId);
+
+    GroupChat addAdmin(Long groupID, Long adminId);
 }
