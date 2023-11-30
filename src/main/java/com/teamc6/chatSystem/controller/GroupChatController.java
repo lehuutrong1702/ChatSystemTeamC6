@@ -3,6 +3,7 @@ package com.teamc6.chatSystem.controller;
 
 import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.User;
+import com.teamc6.chatSystem.record.Connection;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,9 @@ public class GroupChatController {
     public ResponseEntity<GroupChat> findById(@PathVariable("id") Long id){
         return new ResponseEntity<>(groupChatService.findById(id),HttpStatus.OK);
     }
+
+    @GetMapping("{id}/connection")
+    public Connection getConnection(@PathVariable("id") Long id){ return groupChatService.getConnection(id); }
 
     @GetMapping("{id}/members")
     public Set<User> findAllMembers(@PathVariable("id") Long id){
