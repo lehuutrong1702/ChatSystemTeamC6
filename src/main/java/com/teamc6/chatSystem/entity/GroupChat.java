@@ -49,4 +49,6 @@ public class GroupChat {
             inverseJoinColumns = {@JoinColumn(name="user_id")}
     )
     private Set<User> admins;
+
+    public void addAdmin(User u){admins.add(u);}
 }

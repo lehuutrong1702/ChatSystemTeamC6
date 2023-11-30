@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService {
         {
             throw new ResourceNotAcceptableExecption("User", "username", u.getUserId());
         }
-        u.setPassword(PasswordGenerator.generatePassword());
+        //u.setPassword(PasswordGenerator.generatePassword());
+        System.out.println("password: " + u.getPassword());
         if(emailChecking.check(u.getEmail()) == true)
         {
             EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword());

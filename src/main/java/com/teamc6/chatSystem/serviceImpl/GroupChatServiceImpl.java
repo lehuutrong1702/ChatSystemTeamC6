@@ -90,6 +90,27 @@ public class GroupChatServiceImpl implements GroupChatService {
     }
 
     @Override
+    public GroupChat addAdmin(Long groupID, Long adminId) {
+        Optional<GroupChat> g = groupChatRepository.findById(groupID);
+        if(!(g.isPresent())){
+            throw new ResourceNotFoundException("Group chat" , "GroupID",groupID);
+
+        }
+        GroupChat groupChat = g.get();
+
+        Optional<User> u = userRepository.findById(adminId);
+
+        if(!(u.isPresent())){
+            throw new ResourceNotFoundException("User","Admin id",groupID);
+        }
+
+        User user = u.get();
+
+        groupChat.addAdmin(user);
+        return  groupChatRepository.save(groupChat);
+    }
+
+    @Override
     public GroupChat findByName(String name)
     {
         Optional<GroupChat> optional = groupChatRepository.findByName(name);
