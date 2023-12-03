@@ -32,7 +32,7 @@ public class UserController {
     private  UserService userService;
     private PasswordEncoder passwordEncoder;
     private RelationshipService relationshipService;
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
            u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
