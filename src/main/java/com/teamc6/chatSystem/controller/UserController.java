@@ -1,4 +1,4 @@
-package com.teamc6.chatSystem.controller;
+package com.teamc6.chatSystem.config.controller;
 
 
 import com.teamc6.chatSystem.entity.GroupChat;
@@ -55,7 +55,7 @@ public class UserController {
     }
     @GetMapping("/search")
     public ResponseEntity<User> findByUsername(@RequestParam(value = "username",defaultValue = "") String username){
-       // userService.findByUserName(username).getUserActiveSessions();
+        // userService.findByUserName(username).getUserActiveSessions();
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class UserController {
     public Page<User> filterByUsername(
             @PathVariable("username") String username,
             @RequestParam(value = "page" ,defaultValue = "0") int page,
-                                   @RequestParam(value = "size",defaultValue = "5") int perPage){
+            @RequestParam(value = "size",defaultValue = "5") int perPage){
 
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.filterByName(username,pageable);

@@ -1,4 +1,4 @@
-package com.teamc6.chatSystem.controller;
+package com.teamc6.chatSystem.config.controller;
 
 
 import com.teamc6.chatSystem.entity.GroupChat;
@@ -22,6 +22,7 @@ public class GroupChatController {
     public ResponseEntity<GroupChat> findById(@PathVariable("id") Long id){
         return new ResponseEntity<>(groupChatService.findById(id),HttpStatus.OK);
     }
+
 
     @GetMapping("{id}/members")
     public Set<User> findAllMembers(@PathVariable("id") Long id){
