@@ -71,4 +71,45 @@ public class RelationshipServiceImpl implements RelationshipService {
         return mutualSet;
     }
 
+    @Override
+    public Relationship deleteFriend(Long ID1, Long ID2) {
+        var optional1 = userRepository.findById(ID1);
+        if(!optional1.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID1);
+        }
+        var optional2 = userRepository.findById(ID2);
+        if(!optional2.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID2);
+        }
+        User user1 = optional1.get();
+        User user2 = optional2.get();
+
+        Set<Relationship> user1Relationship = user1.getRelationships();
+        Set<Relationship> user2Relationship = user2.getRelationships();
+
+        Relationship friendList = null;
+
+        for (Relationship relationship : user1Relationship)
+        {
+            if (relationship.getName().equals("friend") && relationship.getUsers().contains(user2))
+            {
+                friendList = relationship;
+                break;
+            }
+        }
+        if (friendList != null)
+        {
+            user1Relationship.remove(friendList);
+            user2Relationship.remove(friendList);
+
+            userRepository.saveAndFlush(user1);
+            userRepository.saveAndFlush(user2);
+
+            relationshipRepository.delete(friendList);
+        }
+        return friendList   ;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.teamc6.chatSystem.service;
 
 import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.User;
+import com.teamc6.chatSystem.record.Connection;
 
 import java.util.List;
 import java.util.Set;
@@ -19,4 +20,9 @@ public interface GroupChatService {
     void updateNameGroup(GroupChat groupChat, String name);
 
     GroupChat addMember(Long groupID, Long memberId);
+
+    GroupChat addAdmin(Long groupID, Long adminId);
+
+    // Socket server
+    Connection getConnection(Long id);
 }

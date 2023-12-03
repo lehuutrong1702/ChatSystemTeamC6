@@ -9,6 +9,9 @@ import com.teamc6.chatSystem.exception.ResourceNotFoundException;
 import com.teamc6.chatSystem.repository.RelationshipRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserService;
+import com.teamc6.chatSystem.utils.EmailUtils;
+import com.teamc6.chatSystem.utils.PasswordGenerator;
+import com.teamc6.chatSystem.validation.Email.EmailChecking;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,7 @@ import java.util.Set;
 @Transactional
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private EmailChecking emailChecking;
 
 
     public User save(User u) {
@@ -34,7 +38,16 @@ public class UserServiceImpl implements UserService {
         {
             throw new ResourceNotAcceptableExecption("User", "username", u.getUserId());
         }
-        return userRepository.saveAndFlush(u);
+        //u.setPassword(PasswordGenerator.generatePassword());
+        System.out.println("password: " + u.getPassword());
+        if(emailChecking.check(u.getEmail()) == true)
+        {
+            EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword());
+            return userRepository.saveAndFlush(u);
+        }
+        else {
+            throw new ResourceNotAcceptableExecption("User", "email", u.getEmail());
+        }
     }
 
     @Override
