@@ -118,21 +118,16 @@ public class GroupChatServiceImpl implements GroupChatService {
 
     @Override
     public Connection getConnection(Long id) {
-        Optional<GroupChat> optional = groupChatRepository.findById(id);
-        if(!optional.isPresent())
-        {
-            throw new ResourceNotFoundException("GroupChat", "Group chat connection", id);
-        }
-        ChatServer chatServer = optional.get().server;
+        ChatServer chatServer = ChatServer.getChatServer(id);
         if(chatServer == null){ // First connection
-            Thread thread = null;
             try {
                 chatServer = new ChatServer(new ServerSocket(0));
-                thread = new Thread(chatServer);
+                Thread thread = new Thread(chatServer);
+                ChatServer.setMap(id, chatServer);
+                thread.start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            thread.start();
         }
         return chatServer.getConnection();
     }

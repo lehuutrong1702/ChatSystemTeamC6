@@ -1,14 +1,11 @@
 package com.teamc6.chatSystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.teamc6.chatSystem.record.Connection;
-import com.teamc6.serverSocket.ChatServer;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,10 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name="group_chat")
 public class GroupChat {
-    // Variables utilized for socket connection
-    @Transient
-    public ChatServer server;
-
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
