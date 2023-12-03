@@ -19,7 +19,7 @@ import java.util.Set;
 public class GroupChatController {
     private GroupChatService groupChatService;
 
-    @GetMapping("/search/id={id}")
+    @GetMapping("{id}")
     public ResponseEntity<GroupChat> findById(@PathVariable("id") Long id){
         return new ResponseEntity<>(groupChatService.findById(id),HttpStatus.OK);
     }
@@ -39,17 +39,17 @@ public class GroupChatController {
         return groupChatService.findAllMember(id);
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<GroupChat> addGroup(@RequestBody GroupChat g){
         return new ResponseEntity<GroupChat>(groupChatService.save(g), HttpStatus.CREATED);
     }
 
-   @PutMapping("/{id}/add-members/{member_id}")
+   @PutMapping("/{group_id}/members/{member_id}")
    public   ResponseEntity<GroupChat> addMembers(@PathVariable("id") long groupID, @PathVariable("member_id") long memberId) {
         return new ResponseEntity<GroupChat>(groupChatService.addMember(groupID,memberId),HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/{id}/add-admins/{admin_id}")
+    @PutMapping("/{group_id}/admins/{admin_id}")
     public  ResponseEntity<GroupChat> addAdmins(@PathVariable("id") long groupID, @PathVariable("admin_id") long adminId){
         return new ResponseEntity<GroupChat>(groupChatService.addAdmin(groupID,adminId),HttpStatus.ACCEPTED);
     }
