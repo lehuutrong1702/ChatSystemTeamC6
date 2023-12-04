@@ -7,6 +7,9 @@ import com.teamc6.chatSystem.record.Connection;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +22,38 @@ import java.util.Set;
 public class GroupChatController {
     private GroupChatService groupChatService;
 
+    @GetMapping("/search/{group_name}")
+    public Page<GroupChat> filterByGroupName(@PathVariable("group_name") String group_name,
+                                             @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                             @RequestParam(value = "size",defaultValue = "5") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        System.out.println(group_name);
+        return groupChatService.filterName(group_name, pageable);
+    }
+
+    @GetMapping()
+    public Page<GroupChat> findAll( @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                             @RequestParam(value = "size",defaultValue = "5") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        return groupChatService.findAll(pageable);
+    }
+
+    @GetMapping("/sortname")
+    public Page<GroupChat> sortName(@RequestParam(value = "page" ,defaultValue = "0") int page,
+                                    @RequestParam(value = "size",defaultValue = "5") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        return groupChatService.sortByName(pageable);
+    }
+    @GetMapping("/sorttimecreate")
+    public Page<GroupChat> sortTimeCreate(@RequestParam(value = "page" ,defaultValue = "0") int page,
+                                    @RequestParam(value = "size",defaultValue = "5") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        return groupChatService.sortByCreateDay(pageable);
+    }
     @GetMapping("{id}")
     public ResponseEntity<GroupChat> findById(@PathVariable("id") Long id){
         return new ResponseEntity<>(groupChatService.findById(id),HttpStatus.OK);
     }
-
 
     @GetMapping("{id}/connection")
     public Connection getConnection(@PathVariable("id") Long id){ return groupChatService.getConnection(id); }

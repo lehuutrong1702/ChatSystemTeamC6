@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -52,4 +53,8 @@ public class GroupChat {
     private Set<User> admins;
 
     public void addAdmin(User u){admins.add(u);}
+
+    @OneToMany(mappedBy="groupChat")
+    private List<Message> items;
+
 }
