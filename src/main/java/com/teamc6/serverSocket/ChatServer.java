@@ -6,12 +6,23 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatServer implements Runnable{
+    private static final Map<Long, ChatServer> map = new HashMap<Long, ChatServer>();
     private final ServerSocket serverSocket;
     public  ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     public ChatServer(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
+    }
+
+    public static ChatServer getChatServer(Long id) {
+        return map.get(id);
+    }
+
+    public static void setMap(Long id, ChatServer chatServer) {
+        map.put(id, chatServer);
     }
 
     @Override
@@ -29,6 +40,8 @@ public class ChatServer implements Runnable{
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            closeServerSocket();
         }
     }
 
