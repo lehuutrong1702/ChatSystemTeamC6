@@ -66,7 +66,7 @@ public class UserController {
             @PathVariable("username") String username,
             @RequestParam(value = "page" ,defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "5") int perPage){
-
+        System.out.println(username);
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.filterByName(username,pageable);
     }

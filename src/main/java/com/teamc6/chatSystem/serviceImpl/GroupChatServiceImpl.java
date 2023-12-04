@@ -12,7 +12,8 @@ import com.teamc6.chatSystem.serverSocket.ChatServer;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.List;
@@ -24,20 +25,25 @@ import java.util.Set;
 public class GroupChatServiceImpl implements GroupChatService {
     private GroupChatRepository groupChatRepository;
     private UserRepository userRepository;
+
     @Override
-    public List<GroupChat> filterName(String name) {
-        return groupChatRepository.filterName(name);
+    public Page<GroupChat> findAll(Pageable pageable) {
+        return groupChatRepository.findAll(pageable);
     }
 
     @Override
-    public List<GroupChat> sortByName() {
-        return groupChatRepository.sortOrderByNameAsc();
-        //return null;
+    public Page<GroupChat> filterName(String name, Pageable pageable) {
+        return groupChatRepository.filterName(name, pageable);
     }
 
     @Override
-    public List<GroupChat> sortByCreateDay() {
-        return groupChatRepository.sortOrderByCreateDateAsc();
+    public Page<GroupChat> sortByName(Pageable pageable) {
+        return groupChatRepository.sortOrderByNameAsc(pageable);
+    }
+
+    @Override
+    public Page<GroupChat> sortByCreateDay(Pageable pageable) {
+        return groupChatRepository.sortOrderByCreateDateAsc(pageable);
     }
 
     @Override
