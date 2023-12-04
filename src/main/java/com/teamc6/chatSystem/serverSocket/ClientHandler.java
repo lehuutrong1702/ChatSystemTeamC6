@@ -4,15 +4,24 @@ import com.teamc6.chatSystem.entity.Message;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.MessageService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.Socket;
 
 
+
+@Getter
+@Setter
+
+
 public class ClientHandler implements Runnable {
+
     private ChatServer server;
     private Socket socket;
     private BufferedReader reader;
@@ -20,14 +29,30 @@ public class ClientHandler implements Runnable {
     private String clientId;
     private String clientUsername;
 
-    public ClientHandler(Socket socket, ChatServer server) {
+
+
+  //  private GroupChatService groupChatService;
+
+   // private MessageService messageService;
+
+    public ClientHandler(ChatServer server) {
+     this.server = server;
+    }
+ /*  public ClientHandler(GroupChatService groupChatService) {
+        this.groupChatService = groupChatService;
+    }*/
+
+//    public ClientHandler() {
+//       // System.out.println(groupChatService.toString());
+//    }
+
+    public void init(Socket socket, ChatServer server) {
         try {
             this.server = server;
             this.socket = socket;
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = reader.readLine();
-
             broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
         } catch (IOException e) {
             closeEverything(socket, reader, writer);
@@ -41,8 +66,8 @@ public class ClientHandler implements Runnable {
             try{
                 messageFromClient = reader.readLine();
                 Message message = new Message(clientUsername, messageFromClient);
-                message.setGroupChat(server.groupChatService.findById(server.getGroupChatID()));
-                server.messageService.save(message);
+                message.setGroupChat(server.getGroupChatService().findById(server.getGroupChatID()));
+                server.getMessageService().save(message);
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
@@ -52,6 +77,7 @@ public class ClientHandler implements Runnable {
     }
 
     public  void broadcastMessage(String messageToSend){
+        System.out.println("broadcast");
         for (ClientHandler clientHandler : server.clientHandlers){
             try{
                 if(!clientHandler.clientUsername.equals(clientUsername)){

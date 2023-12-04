@@ -7,10 +7,13 @@ import com.teamc6.chatSystem.exception.ResourceNotFoundException;
 import com.teamc6.chatSystem.record.Connection;
 import com.teamc6.chatSystem.repository.GroupChatRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
+import com.teamc6.chatSystem.serverSocket.ClientHandler;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.serverSocket.ChatServer;
 import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +24,17 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+
 public class GroupChatServiceImpl implements GroupChatService {
     private GroupChatRepository groupChatRepository;
     private UserRepository userRepository;
+
+
+    public GroupChatServiceImpl(GroupChatRepository groupChatRepository, UserRepository userRepository) {
+        this.groupChatRepository = groupChatRepository;
+        this.userRepository = userRepository;
+
+    }
 
     @Override
     public Page<GroupChat> findAll(Pageable pageable) {
@@ -119,22 +129,7 @@ public class GroupChatServiceImpl implements GroupChatService {
         return  groupChatRepository.save(groupChat);
     }
 
-    @Override
-    public Connection getConnection(Long id) {
-        System.out.println("connection");
-        ChatServer chatServer = ChatServer.getChatServer(id);
-        if(chatServer == null){ // First connection
-            try {
-                chatServer = new ChatServer(new ServerSocket(0));
-                Thread thread = new Thread(chatServer);
-                ChatServer.setMap(id, chatServer);
-                thread.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return chatServer.getConnection();
-    }
+
 
     @Override
     public GroupChat findByName(String name)

@@ -3,6 +3,12 @@ package com.teamc6.chatSystem.serverSocket;
 import com.teamc6.chatSystem.record.Connection;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.MessageService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,14 +17,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+
+@Getter
+@Setter
+
+@NoArgsConstructor
 public class ChatServer implements Runnable{
-    public GroupChatService groupChatService;
-    public MessageService messageService;
+
+//    public GroupChatService groupChatService;
+
     private static final Map<Long, ChatServer> map = new HashMap<Long, ChatServer>();
     private long groupChatID;
+
+    private GroupChatService groupChatService;
+    private MessageService messageService;
+
     private ServerSocket serverSocket;
+
+
+
     public  ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+
+
+   // private ClientHandler clientHandler ;
+
+    @Autowired
+    public ChatServer(ServerSocket serverSocket,GroupChatService groupChatService,MessageService messageService) {
+        this.serverSocket = serverSocket;
+        this.groupChatService = groupChatService;
+        this.messageService = messageService;
+    }
+//    public ChatServer(MessageService messageService, ServerSocket serverSocket
+//                   ) {
+//        this.messageService = messageService;
+//        this.serverSocket = serverSocket;
+//    }
+
 //    public ChatServer(ServerSocket serverSocket) {
 //        this.serverSocket = serverSocket;
 //    }
@@ -46,10 +80,9 @@ public class ChatServer implements Runnable{
             while(!serverSocket.isClosed()){
                 Socket socket = serverSocket.accept();
                 System.out.println("A new client has connected!("+socket.getPort()+")");
-
-                ClientHandler clientHandler = new ClientHandler(socket, this);
+                ClientHandler clientHandler = new ClientHandler(this);
+                clientHandler.init(socket,this);
                 clientHandlers.add(clientHandler);
-
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }
@@ -73,7 +106,7 @@ public class ChatServer implements Runnable{
     public Connection getConnection() {
 
         try {
-            return new Connection( Inet4Address.getLocalHost().getHostAddress(),serverSocket.getLocalPort());
+            return new Connection( Inet4Address.getLocalHost().getHostAddress(),this.serverSocket.getLocalPort());
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
