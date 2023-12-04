@@ -57,7 +57,7 @@ public class UserController {
     public ResponseEntity<User> findByUsername(
             @RequestParam(value = "username",defaultValue = "") String username){
        // userService.findByUserName(username).getUserActiveSessions();
-
+        System.out.println("find by username");
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
