@@ -26,19 +26,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET,"api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/v1/users").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"api/v1/users").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"api/v1/users/{id}").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"api/v1/users/{id}").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"api/v1/users/{id}/groups").hasAuthority("USER")
                         .requestMatchers(HttpMethod.POST,"api/v1/users/{id1}/friends/{id2}").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.POST,"api/v1/users").permitAll()
+
 
                         .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/members").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/admins").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"api/v1/groups/{id}/members/{member_id}").hasAuthority("USER")
 
-                        .requestMatchers(HttpMethod.PUT,"api/v1/groups/{id}/admins/{admin_id}").hasAuthority("USER")
 
                         .anyRequest().authenticated()
                 )

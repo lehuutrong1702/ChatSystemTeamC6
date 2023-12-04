@@ -8,7 +8,7 @@ import com.teamc6.chatSystem.record.Connection;
 import com.teamc6.chatSystem.repository.GroupChatRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.GroupChatService;
-import com.teamc6.serverSocket.ChatServer;
+import com.teamc6.chatSystem.serverSocket.ChatServer;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;

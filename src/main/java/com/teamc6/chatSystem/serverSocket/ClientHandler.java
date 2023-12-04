@@ -1,9 +1,16 @@
-package com.teamc6.serverSocket;
+package com.teamc6.chatSystem.serverSocket;
+
+import com.teamc6.chatSystem.entity.Message;
+import com.teamc6.chatSystem.service.GroupChatService;
+import com.teamc6.chatSystem.service.MessageService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Map;
+
 
 public class ClientHandler implements Runnable {
     private ChatServer server;
@@ -33,6 +40,9 @@ public class ClientHandler implements Runnable {
         while (socket.isConnected()){
             try{
                 messageFromClient = reader.readLine();
+                Message message = new Message(clientUsername, messageFromClient);
+                message.setGroupChat(server.groupChatService.findById(server.getGroupChatID()));
+                server.messageService.save(message);
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
