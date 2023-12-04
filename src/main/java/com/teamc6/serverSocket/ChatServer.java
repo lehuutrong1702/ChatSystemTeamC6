@@ -3,8 +3,7 @@ package com.teamc6.serverSocket;
 import com.teamc6.chatSystem.record.Connection;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +55,11 @@ public class ChatServer implements Runnable{
     }
 
     public Connection getConnection() {
-        return new Connection(serverSocket.getInetAddress(),serverSocket.getLocalPort());
+
+        try {
+            return new Connection( Inet4Address.getLocalHost().getHostAddress(),serverSocket.getLocalPort());
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

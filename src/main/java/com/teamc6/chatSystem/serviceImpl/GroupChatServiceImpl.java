@@ -13,11 +13,8 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -118,6 +115,7 @@ public class GroupChatServiceImpl implements GroupChatService {
 
     @Override
     public Connection getConnection(Long id) {
+        System.out.println("connection");
         ChatServer chatServer = ChatServer.getChatServer(id);
         if(chatServer == null){ // First connection
             try {
