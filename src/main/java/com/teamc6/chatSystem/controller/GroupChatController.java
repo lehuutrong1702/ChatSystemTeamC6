@@ -44,12 +44,12 @@ public class GroupChatController {
         return new ResponseEntity<GroupChat>(groupChatService.save(g), HttpStatus.CREATED);
     }
 
-   @PutMapping("/{group_id}/members/{member_id}")
+   @PostMapping("/{id}/members/{member_id}")
    public   ResponseEntity<GroupChat> addMembers(@PathVariable("id") long groupID, @PathVariable("member_id") long memberId) {
         return new ResponseEntity<GroupChat>(groupChatService.addMember(groupID,memberId),HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/{group_id}/admins/{admin_id}")
+    @PostMapping("/{id}/admins/{admin_id}")
     public  ResponseEntity<GroupChat> addAdmins(@PathVariable("id") long groupID, @PathVariable("admin_id") long adminId){
         return new ResponseEntity<GroupChat>(groupChatService.addAdmin(groupID,adminId),HttpStatus.ACCEPTED);
     }
