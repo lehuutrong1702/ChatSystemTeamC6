@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
         Set<User> friendList = new HashSet<User>();
         for(Relationship row: relationshipSet)
         {
-            if(row.getName() == "friend"){
+            if(row.getName().equals( "friend")){
                 friendList.addAll(row.getUsers());
             }
         }

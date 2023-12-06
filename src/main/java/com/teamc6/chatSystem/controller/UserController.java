@@ -48,6 +48,7 @@ public class UserController {
     }
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
+        System.out.println(id);
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
     }
 
@@ -78,6 +79,7 @@ public class UserController {
     @PutMapping("{id}")
     public ResponseEntity<User> update( @PathVariable("id")Long id,
                                                @RequestBody User u){
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
@@ -88,6 +90,7 @@ public class UserController {
 
     @GetMapping("{id}/friends")
     public Set<User> findAllFriends(@PathVariable("id") Long id){
+
         return userService.findAllFriends(id);
     }
 
