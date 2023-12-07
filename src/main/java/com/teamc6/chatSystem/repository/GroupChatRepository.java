@@ -23,4 +23,5 @@ public interface GroupChatRepository extends JpaRepository<GroupChat,Long> {
 
     @Query("SELECT g FROM GroupChat g WHERE g.groupName = :name")
     Optional<GroupChat> findByName(@Param("name") String username);
+
 }

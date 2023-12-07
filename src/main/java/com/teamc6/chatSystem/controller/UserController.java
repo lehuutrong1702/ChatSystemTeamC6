@@ -91,16 +91,6 @@ public class UserController {
         return userService.findAllGroups(id);
     }
 
-    @GetMapping("{id}/groups/{name}")
-    public Page<GroupChat> filterByGroupName(@PathVariable ("id") Long userId,
-                                             @PathVariable("name") String groupName,
-                                             @RequestParam(value = "page" ,defaultValue = "0") int page,
-                                             @RequestParam(value = "size",defaultValue = "5") int perPage)
-    {
-        Pageable pageable = PageRequest.of(page,perPage);
-        return userService.filterByGroupName(userId,groupName,pageable);
-
-    }
     @GetMapping("{id}/friends")
     public Set<User> findAllFriends(@PathVariable("id") Long id){
 
@@ -118,4 +108,23 @@ public class UserController {
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
     }
 
+
+    @GetMapping("{id}/groups/{name}")
+    public Page<GroupChat> filterGroupbyName(@PathVariable("id") Long id,
+                                    @PathVariable("name") String Name,
+                                    @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                    @RequestParam(value = "size",defaultValue = "5") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.filterGroupChatByName(id, Name, pageable);
+    }
+
+
+    @GetMapping("{id}/friends/{name}")
+    public Page<User> filterFriendbyName(@PathVariable("id") Long id,
+                                             @PathVariable("name") String Name,
+                                             @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                             @RequestParam(value = "size",defaultValue = "5") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.filterFriendByName(id, Name, pageable);
+    }
 }
