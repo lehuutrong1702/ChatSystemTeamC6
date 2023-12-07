@@ -34,16 +34,7 @@ public class UserServiceImpl implements UserService {
         {
             throw new ResourceNotAcceptableExecption("User", "username", u.getUserId());
         }
-        //u.setPassword(PasswordGenerator.generatePassword());
-        System.out.println("password: " + u.getPassword());
-        if(emailChecking.check(u.getEmail()) == true)
-        {
-            EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword());
-            return userRepository.saveAndFlush(u);
-        }
-        else {
-            throw new ResourceNotAcceptableExecption("User", "email", u.getEmail());
-        }
+        return userRepository.saveAndFlush(u);
     }
 
     @Override
@@ -205,8 +196,59 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User blockUser(Long ID1, Long ID2) {
+        var optional1 = userRepository.findById(ID1);
+        if(!optional1.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID1);
+        }
+        User user1 = optional1.get();
+        var optional2 = userRepository.findById(ID2);
+        if(!optional2.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID2);
+        }
+        User user2 = optional2.get();
+
+        user1.getBlockers().add(user2);
+        user2.getBlocking().add(user1);
+        return user2;
+    }
+
+    @Override
+    public Page<User> findAllBlock(Long ID1, Pageable pageable) {
+        var optional1 = userRepository.findById(ID1);
+        if(!optional1.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID1);
+        }
+        User user1 = optional1.get();
+        List<User> listBlock = new ArrayList<>();
+        for (User user: user1.getBlockers())
+        {
+            listBlock.add(user);
+        }
+        Page<User> userPage = new PageImpl<>(listBlock, pageable, listBlock.size());
+        return userPage;
+    }
+
+    @Override
+    public User userActive(Long ID1) {
+        var optional1 = userRepository.findById(ID1);
+        if(!optional1.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID1);
+        }
+        User user1 = optional1.get();
+        user1.setActive(!user1.isActive());
+        return user1;
+    }
+
+    @Override
     public Page<User> filterByName(String name, Pageable pageable) {
 //       return userRepository.findByUsername(name,pageable);
         return userRepository.findByUsername(name,pageable);
     }
+
+
 }

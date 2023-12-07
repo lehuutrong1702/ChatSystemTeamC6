@@ -34,4 +34,11 @@ public interface UserService {
 
     Page<User> filterFriendByName(Long ID, String Name, Pageable pageable);
 
+
+    User blockUser(Long ID1, Long ID2);
+
+    Page<User> findAllBlock(Long ID, Pageable pageable);
+
+
+    User userActive(Long ID1);
 }

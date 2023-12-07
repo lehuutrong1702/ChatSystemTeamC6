@@ -5,8 +5,12 @@ import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
+import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.service.RelationshipService;
 import com.teamc6.chatSystem.service.UserService;
+import com.teamc6.chatSystem.utils.EmailUtils;
+import com.teamc6.chatSystem.utils.PasswordGenerator;
+import com.teamc6.chatSystem.validation.Email.EmailChecking;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,13 +32,22 @@ import java.util.Set;
 @AllArgsConstructor
 
 public class UserController {
-
+    private EmailChecking emailChecking;
     private  UserService userService;
     private PasswordEncoder passwordEncoder;
     private RelationshipService relationshipService;
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
-           u.setPassword(passwordEncoder.encode(u.getPassword()));
+        u.setPassword(PasswordGenerator.generatePassword());
+        System.out.println("password: " + u.getPassword());
+        if(emailChecking.check(u.getEmail()) == true)
+        {
+            EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword());
+        }
+        else {
+            throw new ResourceNotAcceptableExecption("User", "email", u.getEmail());
+        }
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.save(u), HttpStatus.CREATED);
     }
 
@@ -126,5 +139,26 @@ public class UserController {
                                              @RequestParam(value = "size",defaultValue = "5") int perPage){
         Pageable pageable = PageRequest.of(page,perPage);
         return userService.filterFriendByName(id, Name, pageable);
+    }
+
+    @PostMapping("{id1}/block/{id2}")
+    public User blockUser(@PathVariable("id1") Long id1,
+                          @PathVariable("id2") Long id2)
+    {
+        return userService.blockUser(id1, id2);
+    }
+
+    @GetMapping("{id}/block")
+    public Page<User> findAllBlock(@PathVariable("id") Long id,
+                                @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                @RequestParam(value = "size",defaultValue = "5") int perPage)
+    {
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.findAllBlock(id, pageable);
+    }
+
+    @PutMapping("{id}/active")
+    public User userActive(@PathVariable("id") Long id){
+        return userService.userActive(id);
     }
 }
