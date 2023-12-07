@@ -4,6 +4,7 @@ package com.teamc6.chatSystem.controller;
 import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.record.Connection;
+import com.teamc6.chatSystem.service.ConnectionService;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class GroupChatController {
     private GroupChatService groupChatService;
-
+    private ConnectionService connectionService;
     @GetMapping("/search/{group_name}")
     public Page<GroupChat> filterByGroupName(@PathVariable("group_name") String group_name,
                                              @RequestParam(value = "page" ,defaultValue = "0") int page,
@@ -56,7 +57,7 @@ public class GroupChatController {
     }
 
     @GetMapping("{id}/connection")
-    public Connection getConnection(@PathVariable("id") Long id){ return groupChatService.getConnection(id); }
+    public Connection getConnection(@PathVariable("id") Long id){ return connectionService.getConnection(id); }
 
 
     @GetMapping("{id}/members")

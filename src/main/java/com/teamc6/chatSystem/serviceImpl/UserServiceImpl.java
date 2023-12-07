@@ -12,14 +12,12 @@ import com.teamc6.chatSystem.utils.EmailUtils;
 import com.teamc6.chatSystem.validation.Email.EmailChecking;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -127,7 +125,22 @@ public class UserServiceImpl implements UserService {
         {
             throw new ResourceNotFoundException("User", "user: ",ID);
         }
+        System.out.println("size= " + optional.get().getGroups().size());
+        System.out.println(optional.get().getGroups());
         return  optional.get().getGroups();
+    }
+    public Page<GroupChat> filterByGroupName(Long userId, String groupName, Pageable pageable){
+        Optional<User> optional = userRepository.findById(userId);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user: ",userId);
+        }
+        Set<GroupChat> groupChats =  optional.get().getGroups();
+        System.out.println(groupChats);
+        List<GroupChat> list = new ArrayList<GroupChat>();
+        list.addAll(groupChats);
+        Page<GroupChat> page = new PageImpl<GroupChat>(list,pageable,groupChats.size());
+        return page;
     }
 
     @Override
@@ -150,9 +163,12 @@ public class UserServiceImpl implements UserService {
         Set<User> friendList = new HashSet<User>();
         for(Relationship row: relationshipSet)
         {
-            if(row.getName().equals( "friend")){
+            System.out.println("group id = " + row.getId());
+            if(row.getName().equals("friend")){
                 friendList.addAll(row.getUsers());
+                System.out.println(friendList.size());
             }
+
         }
         friendList.remove(optional.get());
         return friendList;

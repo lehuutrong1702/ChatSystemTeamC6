@@ -44,8 +44,11 @@ public class UserController {
                                    @RequestParam(value = "size",defaultValue = "5") int perPage) {
 
         Pageable pageable = PageRequest.of(page,perPage);
+
         return userService.findAll(pageable);
     }
+
+
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         System.out.println(id);
@@ -58,7 +61,7 @@ public class UserController {
     public ResponseEntity<User> findByUsername(
             @RequestParam(value = "username",defaultValue = "") String username){
        // userService.findByUserName(username).getUserActiveSessions();
-
+        System.out.println("find by username");
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
 
@@ -88,6 +91,16 @@ public class UserController {
         return userService.findAllGroups(id);
     }
 
+    @GetMapping("{id}/groups/{name}")
+    public Page<GroupChat> filterByGroupName(@PathVariable ("id") Long userId,
+                                             @PathVariable("name") String groupName,
+                                             @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                             @RequestParam(value = "size",defaultValue = "5") int perPage)
+    {
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.filterByGroupName(userId,groupName,pageable);
+
+    }
     @GetMapping("{id}/friends")
     public Set<User> findAllFriends(@PathVariable("id") Long id){
 
@@ -104,4 +117,5 @@ public class UserController {
                                                   @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
     }
+
 }
