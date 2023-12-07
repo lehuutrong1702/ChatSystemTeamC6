@@ -54,6 +54,7 @@ public class GroupChat {
 
     public void addAdmin(User u){admins.add(u);}
 
+    @JsonIgnore
     @OneToMany(mappedBy="groupChat")
     private List<Message> items;
 

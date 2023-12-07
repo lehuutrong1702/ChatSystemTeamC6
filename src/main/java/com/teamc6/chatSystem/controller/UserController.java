@@ -44,8 +44,11 @@ public class UserController {
                                    @RequestParam(value = "size",defaultValue = "5") int perPage) {
 
         Pageable pageable = PageRequest.of(page,perPage);
+
         return userService.findAll(pageable);
     }
+
+
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
@@ -86,6 +89,16 @@ public class UserController {
         return userService.findAllGroups(id);
     }
 
+    @GetMapping("{id}/groups/{name}")
+    public Page<GroupChat> filterByGroupName(@PathVariable ("id") Long userId,
+                                             @PathVariable("name") String groupName,
+                                             @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                             @RequestParam(value = "size",defaultValue = "5") int perPage)
+    {
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.filterByGroupName(userId,groupName,pageable);
+
+    }
     @GetMapping("{id}/friends")
     public Set<User> findAllFriends(@PathVariable("id") Long id){
         return userService.findAllFriends(id);
@@ -101,4 +114,5 @@ public class UserController {
                                                   @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
     }
+
 }

@@ -29,6 +29,6 @@ public interface UserService {
 
     Set<User> findAllFriends(Long Id);
 
-
+    Page<GroupChat> filterByGroupName(Long userId, String groupName, Pageable pageable);
 
 }
