@@ -29,22 +29,9 @@ public class ClientHandler implements Runnable {
     private String clientId;
     private String clientUsername;
 
-
-
-  //  private GroupChatService groupChatService;
-
-   // private MessageService messageService;
-
     public ClientHandler(ChatServer server) {
      this.server = server;
     }
- /*  public ClientHandler(GroupChatService groupChatService) {
-        this.groupChatService = groupChatService;
-    }*/
-
-//    public ClientHandler() {
-//       // System.out.println(groupChatService.toString());
-//    }
 
     public void init(Socket socket, ChatServer server) {
         try {

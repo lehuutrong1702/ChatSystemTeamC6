@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.util.Date;
@@ -11,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -41,6 +43,10 @@ public class GroupChat {
 
 
     public void addMember(User u){
+
+        if(members == null){
+            members = new HashSet<>();
+        }
         members.add(u);
     }
 
@@ -52,10 +58,20 @@ public class GroupChat {
     )
     private Set<User> admins;
 
-    public void addAdmin(User u){admins.add(u);}
+    public void addAdmin(User u){
+        if(admins == null){
+           admins = new HashSet<>();
+        }
+        admins.add(u);}
 
     @JsonIgnore
     @OneToMany(mappedBy="groupChat")
     private List<Message> items;
+
+
+    @JsonIgnore
+
+    @OneToOne(mappedBy = "groupChat",fetch = FetchType.LAZY)
+    Relationship relationship;
 
 }

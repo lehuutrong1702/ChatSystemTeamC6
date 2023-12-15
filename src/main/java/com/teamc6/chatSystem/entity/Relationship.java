@@ -1,13 +1,14 @@
 package com.teamc6.chatSystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+
 @Getter
 @Setter
 @Entity
@@ -29,12 +30,17 @@ public class Relationship {
     @Column(name="relationship_name")
     private String name;
 
-
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="user_relationship",
             joinColumns = {@JoinColumn(name="relationship_id")},
             inverseJoinColumns = {@JoinColumn(name="user_id")}
     )
     private Set<User> users;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "group_id",referencedColumnName = "id")
+    private GroupChat groupChat;
 
 }

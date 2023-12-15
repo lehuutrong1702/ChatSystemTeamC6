@@ -16,6 +16,7 @@ import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
@@ -81,6 +82,7 @@ public class UserController {
     @PutMapping("{id}")
     public ResponseEntity<User> update( @PathVariable("id")Long id,
                                                @RequestBody User u){
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
@@ -114,5 +116,9 @@ public class UserController {
                                                   @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.addFriend(id1,id2),HttpStatus.CREATED);
     }
-
+    @GetMapping("{id1}/friends/{id2}")
+    public ResponseEntity<Relationship> getRelationship(@PathVariable ("id1") Long id1,
+                                                        @PathVariable("id2") Long id2) {
+        return new ResponseEntity<Relationship>(relationshipService.getRelationShip(id1,id2),HttpStatus.OK);
+    }
 }

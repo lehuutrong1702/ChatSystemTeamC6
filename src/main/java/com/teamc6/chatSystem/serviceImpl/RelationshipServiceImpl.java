@@ -1,8 +1,10 @@
 package com.teamc6.chatSystem.serviceImpl;
 
+import com.teamc6.chatSystem.entity.GroupChat;
 import com.teamc6.chatSystem.entity.Relationship;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
+import com.teamc6.chatSystem.repository.GroupChatRepository;
 import com.teamc6.chatSystem.repository.RelationshipRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.RelationshipService;
@@ -18,6 +20,7 @@ import java.util.Set;
 public class RelationshipServiceImpl implements RelationshipService {
     private UserRepository userRepository;
     private RelationshipRepository relationshipRepository;
+    private GroupChatRepository groupChatRepository;
     @Override
     public Set<User> listFriend(Long ID) {
         var optional = userRepository.findById(ID);
@@ -37,6 +40,29 @@ public class RelationshipServiceImpl implements RelationshipService {
         return friendList;
     }
 
+    public Relationship getRelationShip(Long ID1, Long ID2){
+        var optional1 = userRepository.findById(ID1);
+        var optional2 = userRepository.findById(ID2);
+        if(!optional1.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID1);
+        }
+        if(!optional2.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID2);
+        }
+
+        Set<Relationship> relationships = optional1.get().getRelationships();
+  //     System.out.println(relationships);
+        for(Relationship relationship: relationships){
+            System.out.println(relationship.toString());
+           if(relationship.getUsers().contains(optional2.get())){
+                return relationship;
+            }
+        }
+        return null;
+    }
+
     @Override
     public Relationship addFriend(Long ID1, Long ID2) {
         var optional1 = userRepository.findById(ID1);
@@ -53,7 +79,13 @@ public class RelationshipServiceImpl implements RelationshipService {
         friendSet.add(optional1.get());
         friendSet.add(optional2.get());
         Relationship relationship = new Relationship("friend",friendSet);
+
+        GroupChat groupChat = new GroupChat();
+        groupChat.setGroupName(optional1.get().getUserName() + " & " +optional2.get().getUserName());
         relationshipRepository.save(relationship);
+       relationship.setGroupChat(groupChat);
+      groupChatRepository.save(groupChat);
+
         return relationship;
     }
 
