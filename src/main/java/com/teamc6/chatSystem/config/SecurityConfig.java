@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"api/v1/users/search").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"api/v1/users/{id}").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"api/v1/users/{id}").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}").hasAuthority("USER")
                         .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/members").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/admins").hasAuthority("ADMIN")
 
@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"api/v1/users/{id1}/friends/{id2}").hasAuthority("USER")
                         .requestMatchers(HttpMethod.PUT,"api/v1/groups/{id}/members/{member_id}").hasAuthority("USER")
                         .requestMatchers(HttpMethod.PUT,"api/v1/groups/{id}/admins/{admin_id}").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}/messages").hasAuthority("USER")
 
                         .anyRequest().authenticated()
                 )

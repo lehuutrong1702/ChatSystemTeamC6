@@ -66,6 +66,7 @@ public class GroupChat {
 
     @JsonIgnore
     @OneToMany(mappedBy="groupChat")
+    @OrderBy("creationDateTime desc ")
     private List<Message> items;
 
 

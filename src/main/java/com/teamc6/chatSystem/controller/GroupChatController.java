@@ -2,11 +2,14 @@ package com.teamc6.chatSystem.controller;
 
 
 import com.teamc6.chatSystem.entity.GroupChat;
+import com.teamc6.chatSystem.entity.Message;
 import com.teamc6.chatSystem.entity.User;
-import com.teamc6.chatSystem.record.Connection;
+import com.teamc6.chatSystem.model.Connection;
+import com.teamc6.chatSystem.model.MessageObj;
 import com.teamc6.chatSystem.service.ConnectionService;
 import com.teamc6.chatSystem.service.GroupChatService;
-import com.teamc6.chatSystem.service.UserService;
+import com.teamc6.chatSystem.service.MessageService;
+import com.teamc6.chatSystem.serviceImpl.MessageServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +26,7 @@ import java.util.Set;
 public class GroupChatController {
     private GroupChatService groupChatService;
     private ConnectionService connectionService;
+    private MessageService messageService;
     @GetMapping("/search/{group_name}")
     public Page<GroupChat> filterByGroupName(@PathVariable("group_name") String group_name,
                                              @RequestParam(value = "page" ,defaultValue = "0") int page,
@@ -83,5 +87,14 @@ public class GroupChatController {
     @PostMapping("/{id}/admins/{admin_id}")
     public  ResponseEntity<GroupChat> addAdmins(@PathVariable("id") long groupID, @PathVariable("admin_id") long adminId){
         return new ResponseEntity<GroupChat>(groupChatService.addAdmin(groupID,adminId),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/{id}/messages")
+    public Page<Message> getOldMessages(@PathVariable("id") Long groupID,
+                                                     @RequestParam(value = "page" ,defaultValue = "0") int page,
+                                                     @RequestParam(value = "size", defaultValue = "10") int perPage){
+        Pageable pageable = PageRequest.of(page,perPage);
+        System.out.println(groupID);
+        return groupChatService.findAllMessage(groupID,pageable);
     }
 }

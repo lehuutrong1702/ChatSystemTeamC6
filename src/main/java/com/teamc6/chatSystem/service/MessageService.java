@@ -10,6 +10,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.function.Predicate;
 
 public interface MessageService {
-    Page<Message> filterByGroupChatID(Long groupChatID,Pageable pageable);
+    Page<Message> filterByGroupChatID(long groupChatID,Pageable pageable);
     Message save(Message u);
 }

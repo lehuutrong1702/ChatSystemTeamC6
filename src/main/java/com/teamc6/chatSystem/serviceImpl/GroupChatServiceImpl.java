@@ -1,24 +1,20 @@
 package com.teamc6.chatSystem.serviceImpl;
 
 import com.teamc6.chatSystem.entity.GroupChat;
+import com.teamc6.chatSystem.entity.Message;
 import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
-import com.teamc6.chatSystem.record.Connection;
 import com.teamc6.chatSystem.repository.GroupChatRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
-import com.teamc6.chatSystem.serverSocket.ClientHandler;
 import com.teamc6.chatSystem.service.GroupChatService;
-import com.teamc6.chatSystem.serverSocket.ChatServer;
-import lombok.AllArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.SpringSessionContext;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.io.IOException;
-import java.net.ServerSocket;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -129,6 +125,28 @@ public class GroupChatServiceImpl implements GroupChatService {
         return  groupChatRepository.save(groupChat);
     }
 
+    @Override
+    public Page<Message> findAllMessage(Long groupID, Pageable pageable) {
+        Optional<GroupChat> g = groupChatRepository.findById(groupID);
+        if(g.isEmpty()){
+            throw new ResourceNotFoundException("Group chat" , "GroupID",groupID);
+        }
+        GroupChat groupChat = g.get();
+        List<Message> list = groupChat.getItems();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+
+        List<Message> pageContent;
+        try {
+            pageContent = list.subList(start, end);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e.getMessage());
+            pageContent = new ArrayList<>();
+        }
+
+        return new PageImpl<>(pageContent, pageable, list.size());
+    }
 
 
     @Override

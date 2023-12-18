@@ -1,19 +1,12 @@
 package com.teamc6.chatSystem.serverSocket;
 
 import com.teamc6.chatSystem.entity.Message;
-import com.teamc6.chatSystem.service.GroupChatService;
-import com.teamc6.chatSystem.service.MessageService;
-import lombok.AllArgsConstructor;
+import com.teamc6.chatSystem.model.MessageObj;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.Socket;
-
 
 
 @Getter
@@ -24,8 +17,8 @@ public class ClientHandler implements Runnable {
 
     private ChatServer server;
     private Socket socket;
-    private BufferedReader reader;
-    private BufferedWriter writer;
+    private ObjectInputStream reader;
+    private ObjectOutputStream writer;
     private String clientId;
     private String clientUsername;
 
@@ -37,10 +30,9 @@ public class ClientHandler implements Runnable {
         try {
             this.server = server;
             this.socket = socket;
-            this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername = reader.readLine();
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
+            this.writer = new ObjectOutputStream(socket.getOutputStream());
+            this.reader = new ObjectInputStream(socket.getInputStream());
+
         } catch (IOException e) {
             closeEverything(socket, reader, writer);
         }
@@ -48,30 +40,32 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run(){
-        String messageFromClient;
         while (socket.isConnected()){
             try{
-                messageFromClient = reader.readLine();
-                Message message = new Message(clientUsername, messageFromClient);
+                System.out.println("Get Messages");
+                Object obj = reader.readObject();
+                System.out.println(obj.toString());
+                MessageObj messageFromClient = (MessageObj)obj ;
+                System.out.println(messageFromClient.message());
+                Message message = new Message(messageFromClient.userName(), messageFromClient.message());
                 message.setGroupChat(server.getGroupChatService().findById(server.getGroupChatID()));
                 server.getMessageService().save(message);
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
                 break;
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public  void broadcastMessage(String messageToSend){
+    public  void broadcastMessage(MessageObj messageToSend){
         System.out.println("broadcast");
         for (ClientHandler clientHandler : server.clientHandlers){
             try{
-                if(!clientHandler.clientUsername.equals(clientUsername)){
-                    clientHandler.writer.write(messageToSend);
-                    clientHandler.writer.newLine();
-                    clientHandler.writer.flush();
-                }
+                clientHandler.writer.writeObject(messageToSend);
+                clientHandler.writer.flush();
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
             }
@@ -80,10 +74,9 @@ public class ClientHandler implements Runnable {
 
     public  void removeClientHandler(){
         server.clientHandlers.remove(this);
-        broadcastMessage("SERVER: " + clientUsername + " has left the chat");
     }
 
-    public void closeEverything(Socket socket, BufferedReader reader, BufferedWriter writer){
+    public void closeEverything(Socket socket, ObjectInputStream reader, ObjectOutputStream writer){
         removeClientHandler();
         try{
             if(reader != null){

@@ -1,13 +1,10 @@
 package com.teamc6.chatSystem.serviceImpl;
 
-import ch.qos.logback.core.net.server.Client;
-import com.teamc6.chatSystem.record.Connection;
+import com.teamc6.chatSystem.model.Connection;
 import com.teamc6.chatSystem.serverSocket.ChatServer;
-import com.teamc6.chatSystem.serverSocket.ClientHandler;
 import com.teamc6.chatSystem.service.ConnectionService;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,13 +32,14 @@ public class ConnectionServiceImpl implements ConnectionService {
            //     ClientHandler clientHandler = new ClientHandler();
                 ServerSocket sk = new ServerSocket(0);
                 chatServer = new ChatServer(sk, this.groupChatService,this.messageService);
-                Thread thread = new Thread(chatServer);
-                ChatServer.setMap(id, chatServer);
-                thread.start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        System.out.println("ID=" + id);
+        Thread thread = new Thread(chatServer);
+        ChatServer.setMap(id, chatServer);
+        thread.start();
         return chatServer.getConnection();
     }
 }
