@@ -100,11 +100,10 @@ public class GroupChatController {
         return groupChatService.findAllMessage(groupID,pageable);
     }
 
-    @GetMapping("/{id}/search")
+    @PostMapping("/{id}/search")
     public List<Message> searchInChat(@PathVariable("id") long groupID,
-                                      @RequestParam(value = "search") String search){
-
-        return messageService.searchMessageInChat(groupID,search);
+                                      @RequestBody String search){
+        return messageService.searchMessageInChat(groupID,search.substring(1, search.length()-2));
     }
 
 }

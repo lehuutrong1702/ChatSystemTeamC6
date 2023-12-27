@@ -41,7 +41,6 @@ public class ClientHandler implements Runnable {
             InitObj info = (InitObj) obj ;
             this.clientId = info.userId();
             this.clientUsername = info.userName();
-            broadcastMessage(new CommandObj(LocalDateTime.now(), this.clientId, "online"));
 
         } catch (IOException e) {
             closeEverything(socket, reader, writer);
@@ -70,7 +69,6 @@ public class ClientHandler implements Runnable {
     }
 
     public  void broadcastMessage(Object messageToSend){
-        System.out.println("broadcast");
         for (ClientHandler clientHandler : server.clientHandlers){
             try{
                 clientHandler.writer.writeObject(messageToSend);
@@ -82,8 +80,6 @@ public class ClientHandler implements Runnable {
     }
 
     public  void removeClientHandler(){
-
-        broadcastMessage(new CommandObj(LocalDateTime.now(), this.clientId, "offline"));
         server.clientHandlers.remove(this);
     }
 
