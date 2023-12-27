@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class MessageServiceImpl implements MessageService {
     private MessageRepository messageRepository ;
     @Override
-    public Page<Message> filterByGroupChatID(Long groupChatID, Pageable pageable) {
+    public Page<Message> filterByGroupChatID(long groupChatID, Pageable pageable) {
         return messageRepository.findByGroupChatId(groupChatID, pageable);
     }
 

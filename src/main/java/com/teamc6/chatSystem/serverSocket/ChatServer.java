@@ -1,15 +1,12 @@
 package com.teamc6.chatSystem.serverSocket;
 
-import com.teamc6.chatSystem.record.Connection;
+import com.teamc6.chatSystem.model.Connection;
 import com.teamc6.chatSystem.service.GroupChatService;
 import com.teamc6.chatSystem.service.MessageService;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.*;
@@ -79,7 +76,6 @@ public class ChatServer implements Runnable{
         try{
             while(!serverSocket.isClosed()){
                 Socket socket = serverSocket.accept();
-                System.out.println("A new client has connected!("+socket.getPort()+")");
                 ClientHandler clientHandler = new ClientHandler(this);
                 clientHandler.init(socket,this);
                 clientHandlers.add(clientHandler);

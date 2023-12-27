@@ -1,19 +1,15 @@
 package com.teamc6.chatSystem.serverSocket;
 
 import com.teamc6.chatSystem.entity.Message;
-import com.teamc6.chatSystem.service.GroupChatService;
-import com.teamc6.chatSystem.service.MessageService;
-import lombok.AllArgsConstructor;
+import com.teamc6.chatSystem.model.CommandObj;
+import com.teamc6.chatSystem.model.InitObj;
+import com.teamc6.chatSystem.model.MessageObj;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.Socket;
-
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -24,9 +20,9 @@ public class ClientHandler implements Runnable {
 
     private ChatServer server;
     private Socket socket;
-    private BufferedReader reader;
-    private BufferedWriter writer;
-    private String clientId;
+    private ObjectInputStream reader;
+    private ObjectOutputStream writer;
+    private long clientId;
     private String clientUsername;
 
     public ClientHandler(ChatServer server) {
@@ -37,41 +33,48 @@ public class ClientHandler implements Runnable {
         try {
             this.server = server;
             this.socket = socket;
-            this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername = reader.readLine();
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
+            this.writer = new ObjectOutputStream(socket.getOutputStream());
+            this.reader = new ObjectInputStream(socket.getInputStream());
+
+
+            Object obj = reader.readObject();
+            InitObj info = (InitObj) obj ;
+            this.clientId = info.userId();
+            this.clientUsername = info.userName();
+            broadcastMessage(new CommandObj(LocalDateTime.now(), this.clientId, "online"));
+
         } catch (IOException e) {
             closeEverything(socket, reader, writer);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void run(){
-        String messageFromClient;
         while (socket.isConnected()){
             try{
-                messageFromClient = reader.readLine();
-                Message message = new Message(clientUsername, messageFromClient);
+                Object obj = reader.readObject();
+                MessageObj messageFromClient = (MessageObj)obj ;
+                Message message = new Message(this.clientUsername, messageFromClient.message());
                 message.setGroupChat(server.getGroupChatService().findById(server.getGroupChatID()));
                 server.getMessageService().save(message);
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
                 break;
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public  void broadcastMessage(String messageToSend){
+    public  void broadcastMessage(Object messageToSend){
         System.out.println("broadcast");
         for (ClientHandler clientHandler : server.clientHandlers){
             try{
-                if(!clientHandler.clientUsername.equals(clientUsername)){
-                    clientHandler.writer.write(messageToSend);
-                    clientHandler.writer.newLine();
-                    clientHandler.writer.flush();
-                }
+                clientHandler.writer.writeObject(messageToSend);
+                clientHandler.writer.flush();
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
             }
@@ -79,11 +82,12 @@ public class ClientHandler implements Runnable {
     }
 
     public  void removeClientHandler(){
+
+        broadcastMessage(new CommandObj(LocalDateTime.now(), this.clientId, "offline"));
         server.clientHandlers.remove(this);
-        broadcastMessage("SERVER: " + clientUsername + " has left the chat");
     }
 
-    public void closeEverything(Socket socket, BufferedReader reader, BufferedWriter writer){
+    public void closeEverything(Socket socket, ObjectInputStream reader, ObjectOutputStream writer){
         removeClientHandler();
         try{
             if(reader != null){

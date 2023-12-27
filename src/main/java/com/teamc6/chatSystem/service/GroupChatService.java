@@ -1,12 +1,11 @@
 package com.teamc6.chatSystem.service;
 
 import com.teamc6.chatSystem.entity.GroupChat;
+import com.teamc6.chatSystem.entity.Message;
 import com.teamc6.chatSystem.entity.User;
-import com.teamc6.chatSystem.record.Connection;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.List;
+
 import java.util.Set;
 
 
@@ -28,5 +27,5 @@ public interface GroupChatService {
     GroupChat addAdmin(Long groupID, Long adminId);
 
     // Socket server
-
+    Page<Message> findAllMessage(Long groupID, Pageable pageable);
 }

@@ -74,7 +74,7 @@ public class EmailUtils {
             // nguoi nhan
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiveEmail, false));
             // set tieu de
-            message.setSubject("Reset password group 108");
+            message.setSubject("Password System Chat Team C6");
             //
 
 

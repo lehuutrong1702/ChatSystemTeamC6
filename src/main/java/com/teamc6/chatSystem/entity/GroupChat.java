@@ -65,12 +65,12 @@ public class GroupChat {
         admins.add(u);}
 
     @JsonIgnore
-    @OneToMany(mappedBy="groupChat" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="groupChat", cascade = CascadeType.ALL)
+    @OrderBy("creationDateTime desc ")
     private List<Message> items;
 
 
     @JsonIgnore
-
     @OneToOne(mappedBy = "groupChat",fetch = FetchType.LAZY)
     Relationship relationship;
 
