@@ -65,7 +65,7 @@ public class GroupChat {
         admins.add(u);}
 
     @JsonIgnore
-    @OneToMany(mappedBy="groupChat")
+    @OneToMany(mappedBy="groupChat" , cascade = CascadeType.ALL)
     private List<Message> items;
 
 

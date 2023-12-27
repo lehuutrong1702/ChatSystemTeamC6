@@ -179,4 +179,29 @@ public class UserServiceImpl implements UserService {
 //       return userRepository.findByUsername(name,pageable);
         return userRepository.findByUsername(name,pageable);
     }
+
+    @Override
+    public Page<User> findAllBlockers(Long userId, Pageable pageable) {
+        var optional = userRepository.findById(userId);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", userId);
+        }
+        Set<User> blockers =  optional.get().getBlockers();
+     //   System.out.println(groupChats);
+        List<User> list = new ArrayList<User>();
+        list.addAll(blockers);
+        Page<User> page = new PageImpl<User>(list,pageable,blockers.size());
+        return page;
+    }
+
+    @Override
+    public Page<User> findAllBlocking(Long userId, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Boolean blockById(Long userId1, Long userId2) {
+        return null;
+    }
 }
