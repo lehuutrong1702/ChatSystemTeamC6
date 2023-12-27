@@ -14,6 +14,7 @@ public interface UserService {
     List<User> findAll();
     Page<User> findAll(Pageable pageable);
     User update(User u, Long id);
+    void setActive(Long id, boolean isActive);
     User findById(Long ID);
     User findByUserName(String userName);
 

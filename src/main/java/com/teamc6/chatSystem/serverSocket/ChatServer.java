@@ -76,7 +76,6 @@ public class ChatServer implements Runnable{
         try{
             while(!serverSocket.isClosed()){
                 Socket socket = serverSocket.accept();
-                System.out.println("A new client has connected!("+socket.getPort()+")");
                 ClientHandler clientHandler = new ClientHandler(this);
                 clientHandler.init(socket,this);
                 clientHandlers.add(clientHandler);

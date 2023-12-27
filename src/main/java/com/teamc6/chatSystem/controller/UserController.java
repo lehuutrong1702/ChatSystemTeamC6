@@ -61,7 +61,6 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
-
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") long id){
         return new ResponseEntity<User>(userService.findById(id),HttpStatus.OK);
@@ -72,7 +71,7 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<User> findByUsername(
             @RequestParam(value = "username",defaultValue = "") String username){
-       // userService.findByUserName(username).getUserActiveSessions();
+
         System.out.println("find by username");
         return new ResponseEntity<User>(userService.findByUserName(username),HttpStatus.OK);
     }
@@ -96,6 +95,12 @@ public class UserController {
                                                @RequestBody User u){
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/active/{flag}")
+    public void setActive(@PathVariable("id") long id, @PathVariable("flag") boolean isActive){
+//        System.out.println(isActive);
+        userService.setActive(id, isActive);
     }
 
     @GetMapping("{id}/groups")
@@ -137,5 +142,11 @@ public class UserController {
     public ResponseEntity<GroupChat> getP2PGroupChat(@PathVariable ("id1") Long id1,
                                                         @PathVariable("id2") Long id2) {
         return new ResponseEntity<GroupChat>(relationshipService.getRelationShip(id1,id2).getGroupChat(),HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id1}/friends/{id2}")
+    public ResponseEntity<Relationship> delete(@PathVariable("id1") Long id1,
+                                          @PathVariable("id2") Long id2){
+        return new ResponseEntity<Relationship>(relationshipService.deleteFriend(id1, id2),HttpStatus.OK);
     }
 }

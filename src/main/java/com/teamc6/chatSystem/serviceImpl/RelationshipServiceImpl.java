@@ -130,6 +130,8 @@ public class RelationshipServiceImpl implements RelationshipService {
                 break;
             }
         }
+        System.out.println(friendList);
+
         if (friendList != null)
         {
             user1Relationship.remove(friendList);

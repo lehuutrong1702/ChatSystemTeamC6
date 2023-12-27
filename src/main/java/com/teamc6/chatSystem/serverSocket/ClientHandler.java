@@ -1,12 +1,15 @@
 package com.teamc6.chatSystem.serverSocket;
 
 import com.teamc6.chatSystem.entity.Message;
+import com.teamc6.chatSystem.model.CommandObj;
+import com.teamc6.chatSystem.model.InitObj;
 import com.teamc6.chatSystem.model.MessageObj;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -19,7 +22,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private ObjectInputStream reader;
     private ObjectOutputStream writer;
-    private String clientId;
+    private long clientId;
     private String clientUsername;
 
     public ClientHandler(ChatServer server) {
@@ -33,8 +36,17 @@ public class ClientHandler implements Runnable {
             this.writer = new ObjectOutputStream(socket.getOutputStream());
             this.reader = new ObjectInputStream(socket.getInputStream());
 
+
+            Object obj = reader.readObject();
+            InitObj info = (InitObj) obj ;
+            this.clientId = info.userId();
+            this.clientUsername = info.userName();
+            broadcastMessage(new CommandObj(LocalDateTime.now(), this.clientId, "online"));
+
         } catch (IOException e) {
             closeEverything(socket, reader, writer);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -42,12 +54,9 @@ public class ClientHandler implements Runnable {
     public void run(){
         while (socket.isConnected()){
             try{
-                System.out.println("Get Messages");
                 Object obj = reader.readObject();
-                System.out.println(obj.toString());
                 MessageObj messageFromClient = (MessageObj)obj ;
-                System.out.println(messageFromClient.message());
-                Message message = new Message(messageFromClient.userName(), messageFromClient.message());
+                Message message = new Message(this.clientUsername, messageFromClient.message());
                 message.setGroupChat(server.getGroupChatService().findById(server.getGroupChatID()));
                 server.getMessageService().save(message);
                 broadcastMessage(messageFromClient);
@@ -60,7 +69,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public  void broadcastMessage(MessageObj messageToSend){
+    public  void broadcastMessage(Object messageToSend){
         System.out.println("broadcast");
         for (ClientHandler clientHandler : server.clientHandlers){
             try{
@@ -73,6 +82,8 @@ public class ClientHandler implements Runnable {
     }
 
     public  void removeClientHandler(){
+
+        broadcastMessage(new CommandObj(LocalDateTime.now(), this.clientId, "offline"));
         server.clientHandlers.remove(this);
     }
 

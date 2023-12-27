@@ -72,6 +72,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void setActive(Long id, boolean isActive) {
+        var optional = userRepository.findById(id);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", id);
+        }
+        User existUser = optional.get();
+        existUser.setActive(isActive);
+
+        userRepository.saveAndFlush(existUser);
+    }
+
+    @Override
     public User findById(Long ID) {
         Optional<User> optional = userRepository.findById(ID);
         if(!optional.isPresent())
