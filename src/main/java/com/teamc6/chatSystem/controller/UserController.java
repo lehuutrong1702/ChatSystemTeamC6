@@ -149,4 +149,28 @@ public class UserController {
                                           @PathVariable("id2") Long id2){
         return new ResponseEntity<Relationship>(relationshipService.deleteFriend(id1, id2),HttpStatus.OK);
     }
+
+    @GetMapping("{id}/blockers")
+    public Page<User> getBlockers(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page" ,defaultValue = "0") int page,
+            @RequestParam(value = "size",defaultValue = "5") int perPage){
+     //   System.out.println(username);
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.findAllBlockers(id,pageable);
+    }
+    @GetMapping("{id}/blocking")
+    public Page<User> getBlocking(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page" ,defaultValue = "0") int page,
+            @RequestParam(value = "size",defaultValue = "5") int perPage){
+        //   System.out.println(username);
+        Pageable pageable = PageRequest.of(page,perPage);
+        return userService.findAllBlocking(id,pageable);
+    }
+
+    @PostMapping("{id1}/block/{id2}")
+    public ResponseEntity<Boolean> block(@PathVariable("id1") long id1 ,@PathVariable("id2") long id2 ){
+        return new ResponseEntity<Boolean>(userService.blockById(id1,id2),HttpStatus.OK);
+    }
 }

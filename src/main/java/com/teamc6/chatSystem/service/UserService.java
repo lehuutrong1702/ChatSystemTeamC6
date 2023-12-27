@@ -32,4 +32,8 @@ public interface UserService {
 
     Page<GroupChat> filterByGroupName(Long userId, String groupName, Pageable pageable);
 
+   Page<User> findAllBlockers(Long userId, Pageable pageable);
+   Page<User> findAllBlocking(Long userId, Pageable pageable);
+
+   Boolean blockById(Long userId1, Long userId2);
 }

@@ -71,7 +71,6 @@ public class GroupChat {
 
 
     @JsonIgnore
-
     @OneToOne(mappedBy = "groupChat",fetch = FetchType.LAZY)
     Relationship relationship;
 
