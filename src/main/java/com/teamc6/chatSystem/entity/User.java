@@ -55,8 +55,8 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "Block",
-            joinColumns = {@JoinColumn(name = "user_block_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_blocked_id")}
+            joinColumns = {@JoinColumn(name = "user_blocked_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_block_id")}
     )
     @JsonIgnore
     private Set<User> blockers;

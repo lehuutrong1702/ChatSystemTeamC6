@@ -210,11 +210,43 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findAllBlocking(Long userId, Pageable pageable) {
-        return null;
+        var optional = userRepository.findById(userId);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", userId);
+        }
+        Set<User> blocking =  optional.get().getBlocking();
+        //   System.out.println(groupChats);
+        List<User> list = new ArrayList<User>();
+        list.addAll(blocking);
+        Page<User> page = new PageImpl<User>(list,pageable,blocking.size());
+        return page;
     }
 
     @Override
-    public Boolean blockById(Long userId1, Long userId2) {
-        return null;
+    public Boolean blockById(Long ID1, Long ID2) {
+        var optional1 = userRepository.findById(ID1);
+        if(!optional1.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID1);
+        }
+        var optional2 = userRepository.findById(ID2);
+        if(!optional2.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "user", ID2);
+        }
+        User user1 = optional1.get();
+        User user2 = optional2.get();
+        Set<User> blocking =  user1.getBlocking();
+        blocking.add(user2);
+        user1.setBlocking(blocking);
+
+        Set<User> blockers =  user2.getBlockers();
+        blockers.add(user1);
+        user2.setBlockers(blockers);
+        userRepository.saveAndFlush(user2);
+        userRepository.saveAndFlush(user1);
+        return true;
+
     }
 }
