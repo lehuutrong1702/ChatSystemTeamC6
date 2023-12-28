@@ -1,12 +1,10 @@
 package com.teamc6.chatSystem.controller;
 
 
-import com.teamc6.chatSystem.entity.GroupChat;
-import com.teamc6.chatSystem.entity.Relationship;
-import com.teamc6.chatSystem.entity.User;
-import com.teamc6.chatSystem.entity.UserActiveSession;
+import com.teamc6.chatSystem.entity.*;
 import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.service.RelationshipService;
+import com.teamc6.chatSystem.service.ReportSpamService;
 import com.teamc6.chatSystem.service.UserService;
 import com.teamc6.chatSystem.utils.EmailUtils;
 import com.teamc6.chatSystem.utils.PasswordGenerator;
@@ -32,10 +30,12 @@ import java.util.Set;
 @AllArgsConstructor
 
 public class UserController {
+
     private EmailChecking emailChecking;
     private  UserService userService;
     private PasswordEncoder passwordEncoder;
     private RelationshipService relationshipService;
+    private ReportSpamService reportSpamService;
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
         u.setPassword(PasswordGenerator.generatePassword());
@@ -170,7 +170,17 @@ public class UserController {
     }
 
     @PostMapping("{id1}/block/{id2}")
-    public ResponseEntity<Boolean> block(@PathVariable("id1") long id1 ,@PathVariable("id2") long id2 ){
+    public ResponseEntity<Boolean> block(@PathVariable("id1") Long id1 ,@PathVariable("id2") long id2 ){
         return new ResponseEntity<Boolean>(userService.blockById(id1,id2),HttpStatus.OK);
+    }
+
+    @PostMapping("{id}/spams")
+    public ResponseEntity<ReportSpam> spam(@PathVariable ("id") Long id ){
+        return new ResponseEntity<ReportSpam>(reportSpamService.save(id),HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}/spams")
+    public Set<ReportSpam> getAllSpam(@PathVariable ("id") Long id){
+        return reportSpamService.getByUserid(id);
     }
 }

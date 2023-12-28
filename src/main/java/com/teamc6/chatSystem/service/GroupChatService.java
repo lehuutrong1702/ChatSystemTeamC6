@@ -26,6 +26,7 @@ public interface GroupChatService {
 
     GroupChat addAdmin(Long groupID, Long adminId);
 
+    boolean delete(Long groupID);
     // Socket server
     Page<Message> findAllMessage(Long groupID, Pageable pageable);
 }

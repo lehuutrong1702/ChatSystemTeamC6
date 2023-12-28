@@ -62,6 +62,11 @@ public class GroupChatController {
         return new ResponseEntity<>(groupChatService.findById(id),HttpStatus.OK);
     }
 
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Long id){
+        return new ResponseEntity<>(groupChatService.delete(id),HttpStatus.OK);
+    }
+
     @GetMapping("{id}/connection")
     public Connection getConnection(@PathVariable("id") Long id){ return connectionService.getConnection(id); }
 

@@ -75,7 +75,7 @@ public class User {
     private Set<Relationship> relationships;
 
 
-    @OneToMany(mappedBy = "reportUser")
+    @OneToMany(mappedBy = "reportUser", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<ReportSpam> reportSpams;
 
