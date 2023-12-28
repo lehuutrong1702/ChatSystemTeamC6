@@ -14,4 +14,5 @@ public interface MessageService {
     Page<Message> filterByGroupChatID(long groupChatID,Pageable pageable);
     List<Message> searchMessageInChat(long groupChatID, String search);
     Message save(Message u);
+    void clearAll(long groupChatID);
 }

@@ -34,4 +34,9 @@ public class MessageServiceImpl implements MessageService {
         }
         return messageRepository.saveAndFlush(message);
     }
+
+    @Override
+    public void clearAll(long groupChatID) {
+        messageRepository.deleteAllByGroupChat(groupChatID);
+    }
 }

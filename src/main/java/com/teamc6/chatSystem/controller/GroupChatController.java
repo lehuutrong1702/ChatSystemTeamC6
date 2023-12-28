@@ -99,6 +99,10 @@ public class GroupChatController {
         System.out.println(groupID);
         return groupChatService.findAllMessage(groupID,pageable);
     }
+    @DeleteMapping("/{id}/messages")
+    public void clearMessageHistory(@PathVariable("id") Long groupID){
+        messageService.clearAll(groupID);
+    }
 
     @PostMapping("/{id}/search")
     public List<Message> searchInChat(@PathVariable("id") long groupID,

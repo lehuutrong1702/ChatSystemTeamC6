@@ -5,8 +5,10 @@ import com.teamc6.chatSystem.entity.Message;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,4 +18,9 @@ public interface MessageRepository extends JpaRepository<Message,Long> {
 
     @Query("SELECT m FROM Message m WHERE m.groupChat.id = :groupId AND m.message ILIKE %:search%")
     List<Message> searchMessagesInChat(@Param("groupId") Long groupId, @Param("search") String search);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Message m WHERE m.groupChat.id = :groupId")
+    void deleteAllByGroupChat(@Param("groupId") Long groupId);
 }
