@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user-active-sessions")
 @AllArgsConstructor
@@ -30,5 +32,10 @@ public class UserActiveSessionController {
 
         System.out.println("api");
         return new ResponseEntity<UserActiveSession>(userActiveSessionService.update(sessionId), HttpStatus.CREATED);
+    }
+
+    @GetMapping()
+    public List<UserActiveSession> getAll(){
+        return userActiveSessionService.getAll();
     }
 }
