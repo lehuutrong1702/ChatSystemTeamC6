@@ -1,6 +1,7 @@
 package com.teamc6.chatSystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

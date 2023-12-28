@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Service
-
+@Service // <- @Bean
+//
+//
 public class GroupChatServiceImpl implements GroupChatService {
     private GroupChatRepository groupChatRepository;
     private UserRepository userRepository;
@@ -30,6 +31,17 @@ public class GroupChatServiceImpl implements GroupChatService {
         this.groupChatRepository = groupChatRepository;
         this.userRepository = userRepository;
 
+    }
+
+    @Override
+    public boolean delete(Long ID) {
+        Optional<GroupChat> optional = groupChatRepository.findById(ID);
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("GroupChat", "Group chat name: ", ID);
+        }
+        groupChatRepository.delete(optional.get());
+        return true;
     }
 
     @Override
