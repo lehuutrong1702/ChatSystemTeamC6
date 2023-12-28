@@ -1,15 +1,58 @@
 package com.teamc6.chatSystem.serviceImpl;
 
 import com.teamc6.chatSystem.entity.User;
+import com.teamc6.chatSystem.entity.UserActiveSession;
+import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
+import com.teamc6.chatSystem.exception.ResourceNotFoundException;
 import com.teamc6.chatSystem.repository.UserActiveSessionRepository;
+import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserActiveSessionService;
+import com.teamc6.chatSystem.utils.EmailUtils;
+import lombok.AllArgsConstructor;
+import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class UserActiveSessionServiceImpl implements UserActiveSessionService {
     private UserActiveSessionRepository userActiveSessionRepository;
+    private UserRepository userRepository;
+    @Override
+    public UserActiveSession update(Long sesionid) {
+
+
+        var optional = userActiveSessionRepository.findById(sesionid);
+
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("Session", "session id", sesionid);
+        }
+
+        var session = optional.get();
+        optional.get().setTimeLogout(new Date());
+        return userActiveSessionRepository.saveAndFlush(session);
+
+    }
+@Override
+    public UserActiveSession save(Long userid) {
+
+       ;
+        var optional = userRepository.findById(userid);
+
+        if(!optional.isPresent())
+        {
+            throw new ResourceNotFoundException("User", "userid", userid);
+        }
+        var session = new UserActiveSession();
+        session.setTimeActive(new Date());
+        session.setSessionUser(optional.get());
+        return userActiveSessionRepository.saveAndFlush(session);
+
+    }
     @Override
     public List<User> findUserActiveByTime(Date startTime, Date endTime) {
         return userActiveSessionRepository.listUserActive(startTime, endTime);
