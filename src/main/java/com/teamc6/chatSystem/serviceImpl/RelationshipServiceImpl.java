@@ -103,7 +103,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
-    public Relationship deleteFriend(Long ID1, Long ID2) {
+    public void deleteFriend(Long ID1, Long ID2) {
         var optional1 = userRepository.findById(ID1);
         if(!optional1.isPresent())
         {
@@ -142,7 +142,6 @@ public class RelationshipServiceImpl implements RelationshipService {
 
             relationshipRepository.delete(friendList);
         }
-        return friendList   ;
     }
 
 }

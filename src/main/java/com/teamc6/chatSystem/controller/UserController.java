@@ -145,9 +145,9 @@ public class UserController {
     }
 
     @DeleteMapping("{id1}/friends/{id2}")
-    public ResponseEntity<Relationship> delete(@PathVariable("id1") Long id1,
+    public void delete(@PathVariable("id1") Long id1,
                                           @PathVariable("id2") Long id2){
-        return new ResponseEntity<Relationship>(relationshipService.deleteFriend(id1, id2),HttpStatus.OK);
+        relationshipService.deleteFriend(id1, id2);
     }
 
     @GetMapping("{id}/blockers")

@@ -31,7 +31,7 @@ public class Relationship {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name="user_relationship",
             joinColumns = {@JoinColumn(name="relationship_id")},
             inverseJoinColumns = {@JoinColumn(name="user_id")}

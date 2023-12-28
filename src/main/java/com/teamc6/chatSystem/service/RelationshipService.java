@@ -14,7 +14,7 @@ public interface RelationshipService {
 
     Map<Long, Long> mutualFriend(Long ID);
 
-    Relationship deleteFriend(Long ID1, Long ID2);
+    void deleteFriend(Long ID1, Long ID2);
    Relationship getRelationShip(Long ID1, Long ID2);
 
 }
