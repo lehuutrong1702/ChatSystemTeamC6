@@ -17,4 +17,6 @@ public interface UserActiveSessionService {
 
     UserActiveSession save(Long userId);
     UserActiveSession update(Long sessionId);
+
+    List<UserActiveSession> getAll();
 }

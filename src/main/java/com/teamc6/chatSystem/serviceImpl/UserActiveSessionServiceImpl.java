@@ -21,6 +21,12 @@ import java.util.List;
 public class UserActiveSessionServiceImpl implements UserActiveSessionService {
     private UserActiveSessionRepository userActiveSessionRepository;
     private UserRepository userRepository;
+
+    @Override
+    public List<UserActiveSession> getAll() {
+        return userActiveSessionRepository.findAll();
+    }
+
     @Override
     public UserActiveSession update(Long sesionid) {
 
