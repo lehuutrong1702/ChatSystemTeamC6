@@ -27,6 +27,10 @@ public interface GroupChatService {
 
     GroupChat addAdmin(Long groupID, Long adminId);
 
+    GroupChat rename(Long groupID, String name);
+
+
+    GroupChat deleteMember(Long groupID, Long memberId);
     // Socket server
 
 }

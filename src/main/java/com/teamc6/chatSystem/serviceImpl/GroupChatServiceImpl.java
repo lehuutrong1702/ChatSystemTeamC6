@@ -129,6 +129,39 @@ public class GroupChatServiceImpl implements GroupChatService {
         return  groupChatRepository.save(groupChat);
     }
 
+    @Override
+    public GroupChat rename(Long groupID, String name) {
+        Optional<GroupChat> g = groupChatRepository.findById(groupID);
+        if(!(g.isPresent())){
+            throw new ResourceNotFoundException("Group chat" , "GroupID",groupID);
+
+        }
+        GroupChat groupChat = g.get();
+        groupChat.setGroupName(name);
+        return groupChatRepository.saveAndFlush(groupChat);
+    }
+
+    @Override
+    public GroupChat deleteMember(Long groupID, Long memberId) {
+        Optional<GroupChat> g = groupChatRepository.findById(groupID);
+        if(!(g.isPresent())){
+            throw new ResourceNotFoundException("Group chat" , "GroupID",groupID);
+
+        }
+        GroupChat groupChat = g.get();
+
+        Optional<User> u = userRepository.findById(memberId);
+
+        if(!(u.isPresent())){
+            throw new ResourceNotFoundException("User","user id",groupID);
+        }
+
+        User user = u.get();
+        groupChat.removeMember(user);
+
+        // Lưu thay đổi vào cơ sở dữ liệu
+        return groupChatRepository.saveAndFlush(groupChat);
+    }
 
 
     @Override

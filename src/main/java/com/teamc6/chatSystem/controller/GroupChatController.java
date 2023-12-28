@@ -84,4 +84,14 @@ public class GroupChatController {
     public  ResponseEntity<GroupChat> addAdmins(@PathVariable("id") long groupID, @PathVariable("admin_id") long adminId){
         return new ResponseEntity<GroupChat>(groupChatService.addAdmin(groupID,adminId),HttpStatus.ACCEPTED);
     }
+
+    @PutMapping("/{id}/{name}")
+    public ResponseEntity<GroupChat> rename(@PathVariable("id") long groupID, @PathVariable("name") String name){
+        return new ResponseEntity<GroupChat>(groupChatService.rename(groupID, name), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/{id}/members/{member_id}")
+    public   ResponseEntity<GroupChat> deleteMembers(@PathVariable("id") long groupID, @PathVariable("member_id") long memberId) {
+        return new ResponseEntity<GroupChat>(groupChatService.deleteMember(groupID,memberId),HttpStatus.ACCEPTED);
+    }
 }

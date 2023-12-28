@@ -39,11 +39,14 @@ public class GroupChat {
     @JsonIgnore
     private Set<User> members ;
 
-
     public void addMember(User u){
         members.add(u);
     }
-
+    public void removeMember(User user) {
+        if (members != null) {
+            members.remove(user);
+        }
+    }
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="admin_group",
