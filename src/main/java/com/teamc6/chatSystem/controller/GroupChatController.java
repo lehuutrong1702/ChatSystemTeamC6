@@ -78,7 +78,7 @@ public class GroupChatController {
 
     @GetMapping("{id}/admins")
     public Set<User> findAllAdmins(@PathVariable("id") Long id){
-        return groupChatService.findAllMember(id);
+        return groupChatService.findAllAdmin(id);
     }
 
     @PostMapping()
@@ -116,8 +116,8 @@ public class GroupChatController {
     }
 
 
-    @PutMapping("/{id}/{name}")
-    public ResponseEntity<GroupChat> rename(@PathVariable("id") long groupID, @PathVariable("name") String name){
+    @PatchMapping("/{id}")
+    public ResponseEntity<GroupChat> rename(@PathVariable("id") long groupID, @RequestParam("name") String name){
         return new ResponseEntity<GroupChat>(groupChatService.rename(groupID, name), HttpStatus.ACCEPTED);
     }
 
