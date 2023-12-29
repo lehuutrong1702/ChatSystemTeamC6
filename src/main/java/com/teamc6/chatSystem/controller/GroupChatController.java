@@ -73,7 +73,7 @@ public class GroupChatController {
 
     @GetMapping("{id}/members")
     public Set<User> findAllMembers(@PathVariable("id") Long id){
-        return groupChatService.findAllMember(id);
+        System.out.println(id);return groupChatService.findAllMember(id);
     }
 
     @GetMapping("{id}/admins")
