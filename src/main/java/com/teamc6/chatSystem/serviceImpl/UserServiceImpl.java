@@ -188,21 +188,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<GroupChat> filterGroupChatByName(Long ID, String Name, Pageable pageable) {
-        Set<GroupChat> groupChatSet = findAllGroups(ID);
-        List<GroupChat> filteredGroupChats = new ArrayList<>();
-        for (GroupChat groupChat: groupChatSet)
-        {
-            if(groupChat.getGroupName().contains(Name))
-            {
-                filteredGroupChats.add(groupChat);
-            }
-        }
-        Page<GroupChat> groupChatPage = new PageImpl<>(filteredGroupChats, pageable, filteredGroupChats.size());
-        return groupChatPage;
-    }
-
-    @Override
     public Page<User> filterFriendByName(Long ID, String Name, Pageable pageable) {
         Set<User> userSet = findAllFriends(ID);
         List<User> filteredFriend = new ArrayList<>();
