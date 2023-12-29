@@ -188,6 +188,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<User> filterFriendByName(Long ID, String Name, Pageable pageable) {
+        Set<User> userSet = findAllFriends(ID);
+        List<User> filteredFriend = new ArrayList<>();
+        for (User user: userSet)
+        {
+            if(user.getUserName().contains(Name))
+            {
+                filteredFriend.add(user);
+            }
+        }
+        Page<User> userPage = new PageImpl<>(filteredFriend, pageable, filteredFriend.size());
+        return userPage;
+    }
+
+    @Override
     public Page<User> filterByName(String name, Pageable pageable) {
 //       return userRepository.findByUsername(name,pageable);
         return userRepository.findByUsername(name,pageable);

@@ -30,7 +30,11 @@ public interface UserService {
 
     Set<User> findAllFriends(Long Id);
 
-    Page<GroupChat> filterByGroupName(Long userId, String groupName, Pageable pageable);
+
+    Page<GroupChat> filterByGroupName(Long ID, String Name, Pageable pageable);
+
+    Page<User> filterFriendByName(Long ID, String Name, Pageable pageable);
+
 
    Page<User> findAllBlockers(Long userId, Pageable pageable);
    Page<User> findAllBlocking(Long userId, Pageable pageable);

@@ -73,7 +73,7 @@ public class GroupChatController {
 
     @GetMapping("{id}/members")
     public Set<User> findAllMembers(@PathVariable("id") Long id){
-        return groupChatService.findAllMember(id);
+        System.out.println(id);return groupChatService.findAllMember(id);
     }
 
     @GetMapping("{id}/admins")
@@ -109,10 +109,10 @@ public class GroupChatController {
         messageService.clearAll(groupID);
     }
 
-    @PostMapping("/{id}/search")
+    @GetMapping("/{id}/text-search")
     public List<Message> searchInChat(@PathVariable("id") long groupID,
-                                      @RequestBody String search){
-        return messageService.searchMessageInChat(groupID,search.substring(1, search.length()-2));
+                                      @RequestParam(value = "search", defaultValue = "") String search){
+        return messageService.searchMessageInChat(groupID,search);
     }
 
 }
