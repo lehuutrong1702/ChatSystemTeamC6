@@ -28,6 +28,11 @@ public class UserActiveSessionServiceImpl implements UserActiveSessionService {
     }
 
     @Override
+    public List<UserActiveSession> getByTime(Date start, Date end) {
+      return userActiveSessionRepository.listSession(start,end);
+    }
+
+    @Override
     public UserActiveSession update(Long sesionid) {
 
 
