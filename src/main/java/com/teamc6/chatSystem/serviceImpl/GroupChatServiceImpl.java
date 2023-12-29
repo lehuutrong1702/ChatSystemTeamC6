@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 
@@ -212,6 +209,7 @@ public class GroupChatServiceImpl implements GroupChatService {
         {
             throw new ResourceNotAcceptableExecption("Groupchat", "groupID", g.getId());
         }
+        g.setTimeCreate(new Date());
         return groupChatRepository.saveAndFlush(g);
     }
 

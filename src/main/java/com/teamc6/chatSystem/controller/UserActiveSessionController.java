@@ -7,10 +7,12 @@ import com.teamc6.chatSystem.service.UserActiveSessionService;
 import com.teamc6.chatSystem.utils.EmailUtils;
 import com.teamc6.chatSystem.utils.PasswordGenerator;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -34,8 +36,22 @@ public class UserActiveSessionController {
         return new ResponseEntity<UserActiveSession>(userActiveSessionService.update(sessionId), HttpStatus.CREATED);
     }
 
+//    @GetMapping()
+//    public List<UserActiveSession> getAll(){
+//        return userActiveSessionService.getAll();
+//    }
     @GetMapping()
-    public List<UserActiveSession> getAll(){
-        return userActiveSessionService.getAll();
+    public List<UserActiveSession> getByTime(
+            @RequestParam(value = "start" ) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
+            @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
+        return userActiveSessionService.getByTime(start,end);
+    }
+
+
+
+    @GetMapping("/users")
+    public List<User> getUserByActiveTime(@RequestParam(value = "start" )  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
+                                          @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end){
+        return userActiveSessionService.findUserActiveByTime(start,end);
     }
 }

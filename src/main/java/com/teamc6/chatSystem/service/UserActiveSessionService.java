@@ -19,4 +19,6 @@ public interface UserActiveSessionService {
     UserActiveSession update(Long sessionId);
 
     List<UserActiveSession> getAll();
+    List<UserActiveSession> getByTime(Date start,Date end);
+
 }

@@ -9,8 +9,10 @@ import java.util.Date;
 import java.util.List;
 
 public interface UserActiveSessionRepository extends JpaRepository<UserActiveSession,Long> {
-    @Query("SELECT uas.sessionUser FROM UserActiveSession uas WHERE uas.timeActive >= :startTime AND uas.timeLogout <= :endTime")
+    @Query("SELECT uas.sessionUser FROM UserActiveSession uas WHERE uas.timeActive >= :startTime AND uas.timeActive <= :endTime")
     List<User> listUserActive(Date startTime, Date endTime);
 
+    @Query("SELECT uas FROM UserActiveSession uas WHERE uas.timeActive >= :startTime AND uas.timeActive <= :endTime")
+    List<UserActiveSession> listSession(Date startTime, Date endTime);
 
 }
