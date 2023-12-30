@@ -78,7 +78,7 @@ public class GroupChatController {
 
     @GetMapping("{id}/admins")
     public Set<User> findAllAdmins(@PathVariable("id") Long id){
-        return groupChatService.findAllMember(id);
+        return groupChatService.findAllAdmin(id);
     }
 
     @PostMapping()
@@ -115,4 +115,14 @@ public class GroupChatController {
         return messageService.searchMessageInChat(groupID,search);
     }
 
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<GroupChat> rename(@PathVariable("id") long groupID, @RequestParam("name") String name){
+        return new ResponseEntity<GroupChat>(groupChatService.rename(groupID, name), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/{id}/members/{member_id}")
+    public   ResponseEntity<GroupChat> deleteMembers(@PathVariable("id") long groupID, @PathVariable("member_id") long memberId) {
+        return new ResponseEntity<GroupChat>(groupChatService.deleteMember(groupID,memberId),HttpStatus.ACCEPTED);
+    }
 }
