@@ -16,12 +16,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +41,7 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
         u.setPassword(PasswordGenerator.generatePassword());
+        u.setTimeRegister(new Date());
         System.out.println("password: " + u.getPassword());
         if(emailChecking.check(u.getEmail()) == true)
         {
@@ -182,5 +185,11 @@ public class UserController {
     @GetMapping("{id}/spams")
     public Set<ReportSpam> getAllSpam(@PathVariable ("id") Long id){
         return reportSpamService.getByUserid(id);
+    }
+    @GetMapping("/time-register")
+    public List<User> getByTimeRegister(
+            @RequestParam(value = "start" ) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
+            @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
+        return userService.getByTime(start,end);
     }
 }
