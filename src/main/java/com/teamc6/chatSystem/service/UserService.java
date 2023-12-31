@@ -6,6 +6,7 @@ import com.teamc6.chatSystem.entity.UserActiveSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -40,4 +41,5 @@ public interface UserService {
    Page<User> findAllBlocking(Long userId, Pageable pageable);
 
    Boolean blockById(Long userId1, Long userId2);
+    List<User> getByTime(Date start, Date end);
 }

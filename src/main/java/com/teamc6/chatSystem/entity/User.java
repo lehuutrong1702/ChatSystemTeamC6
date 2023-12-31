@@ -1,21 +1,19 @@
 package com.teamc6.chatSystem.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 
-
-
 @Entity
-@Table(name="user")
+@Table(name = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

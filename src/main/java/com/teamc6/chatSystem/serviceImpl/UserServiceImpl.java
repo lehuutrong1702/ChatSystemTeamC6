@@ -264,4 +264,9 @@ public class UserServiceImpl implements UserService {
         return true;
 
     }
+
+    @Override
+    public List<User> getByTime(Date start, Date end) {
+        return  userRepository.listUserByTimeRegister(start,end);
+    }
 }

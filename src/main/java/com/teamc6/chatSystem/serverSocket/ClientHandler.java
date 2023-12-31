@@ -35,8 +35,6 @@ public class ClientHandler implements Runnable {
             this.socket = socket;
             this.writer = new ObjectOutputStream(socket.getOutputStream());
             this.reader = new ObjectInputStream(socket.getInputStream());
-
-
             Object obj = reader.readObject();
             InitObj info = (InitObj) obj ;
             this.clientId = info.userId();
