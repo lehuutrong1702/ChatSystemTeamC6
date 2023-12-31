@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"api/v1/users").permitAll()
                         .requestMatchers(HttpMethod.GET,"api/v1/users/search").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"api/v1/users/{id}").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"api/v1/users/{id}").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"api/v1/users/{id}").hasAuthority("USER")
                         .requestMatchers(HttpMethod.GET,"api/v1/groups/{id}").hasAuthority("USER")
 
                         .requestMatchers(HttpMethod.GET,"api/v1/users/{id}/groups").hasAuthority("USER")
