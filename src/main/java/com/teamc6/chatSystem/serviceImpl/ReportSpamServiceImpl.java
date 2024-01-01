@@ -9,6 +9,8 @@ import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.ReportSpamService;
 import com.teamc6.chatSystem.utils.EmailUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.representer.Represent;
 
@@ -27,7 +29,10 @@ public class ReportSpamServiceImpl implements ReportSpamService {
     public List<ReportSpam> sortOrderByName() {
         return null;//reportSpamRepository.findAllByOrderByNameAsc();
     }
-
+    @Override
+    public Page<ReportSpam> findAll(Pageable pageable) {
+        return reportSpamRepository.findAll(pageable);
+    }
     @Override
     public List<ReportSpam> sortOrderByCreateDate() {
 
