@@ -11,19 +11,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MyUserDetail implements UserDetails {
-
     private String username;
     private String password;
     private boolean active;
     private List<GrantedAuthority> authorities;
 
-    public MyUserDetail(User user){
+    public MyUserDetail(User user) {
         this.username = user.getUserName();
-        this.password= user.getPassword();
-       System.out.println(password);
-       this.active = user.isActive();
-       this.authorities = Arrays.stream(user.getRole().split(","))
-               .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        this.password = user.getPassword();
+
+        this.active = user.isActive();
+        this.authorities = Arrays.stream(user.getRole().split(","))
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Override
