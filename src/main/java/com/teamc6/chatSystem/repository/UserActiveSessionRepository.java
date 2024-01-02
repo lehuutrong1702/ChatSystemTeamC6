@@ -15,4 +15,6 @@ public interface UserActiveSessionRepository extends JpaRepository<UserActiveSes
     @Query("SELECT uas FROM UserActiveSession uas WHERE uas.timeActive >= :startTime AND uas.timeActive <= :endTime")
     List<UserActiveSession> listSession(Date startTime, Date endTime);
 
+    @Query("SELECT uas FROM UserActiveSession uas WHERE uas.sessionUser.userId = :Id AND uas.timeLogout = null ")
+    List<UserActiveSession> sessionOnline(Long Id);
 }

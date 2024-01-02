@@ -5,6 +5,7 @@ import com.teamc6.chatSystem.entity.*;
 import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.service.RelationshipService;
 import com.teamc6.chatSystem.service.ReportSpamService;
+import com.teamc6.chatSystem.service.UserActiveSessionService;
 import com.teamc6.chatSystem.service.UserService;
 import com.teamc6.chatSystem.utils.EmailUtils;
 import com.teamc6.chatSystem.utils.PasswordGenerator;
@@ -38,6 +39,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
     private RelationshipService relationshipService;
     private ReportSpamService reportSpamService;
+    private UserActiveSessionService userActiveSessionService;
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody User u){
         u.setPassword(PasswordGenerator.generatePassword());
@@ -100,7 +102,7 @@ public class UserController {
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
-    @GetMapping("{id}/active/{flag}")
+    @PostMapping("{id}/active/{flag}")
     public void setActive(@PathVariable("id") long id, @PathVariable("flag") boolean isActive){
 //        System.out.println(isActive);
         userService.setActive(id, isActive);
@@ -191,5 +193,10 @@ public class UserController {
             @RequestParam(value = "start" ) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
             @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
         return userService.getByTime(start,end);
+    }
+
+    @GetMapping("/{id}/online")
+    public ResponseEntity<Boolean> isOnline(@PathVariable("id") long id){
+        return new ResponseEntity<Boolean>(userActiveSessionService.isOnline(id),HttpStatus.OK);
     }
 }
