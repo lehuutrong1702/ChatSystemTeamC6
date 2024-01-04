@@ -34,17 +34,17 @@ public class UserActiveSessionController {
         return new ResponseEntity<UserActiveSession>(userActiveSessionService.update(sessionId), HttpStatus.CREATED);
     }
 
-//    @GetMapping()
-//    public List<UserActiveSession> getAll(){
-//        return userActiveSessionService.getAll();
-//    }
     @GetMapping()
+    public List<UserActiveSession> getAll(){
+        return userActiveSessionService.getAll();
+    }
+
+    @GetMapping("/filter")
     public List<UserActiveSession> getByTime(
             @RequestParam(value = "start" ) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
             @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end) {
         return userActiveSessionService.getByTime(start,end);
     }
-
 
     @GetMapping("/users")
     public List<User> getUserByActiveTime(@RequestParam(value = "start" )  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
