@@ -33,7 +33,7 @@ public class GroupChat {
     Date timeCreate;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name="user_group",
             joinColumns = {@JoinColumn(name="group_id")},
             inverseJoinColumns = {@JoinColumn(name="user_id")}
@@ -61,6 +61,11 @@ public class GroupChat {
     )
     private Set<User> admins;
 
+    public void removeAdmin(User user) {
+        if (admins != null) {
+            admins.remove(user);
+        }
+    }
     public void addAdmin(User u){
         if(admins == null){
            admins = new HashSet<>();

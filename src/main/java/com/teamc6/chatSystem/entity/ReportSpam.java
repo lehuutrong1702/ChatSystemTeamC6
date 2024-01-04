@@ -25,6 +25,6 @@ public class ReportSpam {
     private Date timeReport;
 
     @ManyToOne
-    @JoinColumn(name="user_id",nullable = false)
-    private User reportUser ;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User reportUser;
 }

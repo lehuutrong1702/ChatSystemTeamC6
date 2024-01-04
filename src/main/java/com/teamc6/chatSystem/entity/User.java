@@ -47,11 +47,21 @@ public class User {
     private String password;
 
 
-    @ManyToMany(mappedBy = "blockers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "blockers", cascade = {
+            //  CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
+    }, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<User> blocking;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {
+            //  CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
+    })
     @JoinTable(name = "Block",
             joinColumns = {@JoinColumn(name = "user_blocked_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_block_id")}
@@ -60,24 +70,35 @@ public class User {
     private Set<User> blockers;
 
 
-    @ManyToMany(mappedBy = "members")
+    @ManyToMany(mappedBy = "members",cascade = {
+          //  CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
+        //    CascadeType.REMOVE
+    })
     @JsonIgnore
     private Set<GroupChat> groups;
 
-    @ManyToMany(mappedBy = "admins")
+    @ManyToMany(mappedBy = "admins",cascade = {
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
+        //    CascadeType.REMOVE
+    })
     @JsonIgnore
     private Set<GroupChat> groupAdmins;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", cascade=CascadeType.REMOVE)
     @JsonIgnore
     private Set<Relationship> relationships;
 
 
-    @OneToMany(mappedBy = "reportUser")
+    @OneToMany(mappedBy = "reportUser",cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<ReportSpam> reportSpams;
 
-    @OneToMany(mappedBy = "sessionUser")
+    @OneToMany(mappedBy = "sessionUser",cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<UserActiveSession> userActiveSessions;
 

@@ -6,6 +6,7 @@ import com.teamc6.chatSystem.entity.User;
 import com.teamc6.chatSystem.entity.UserActiveSession;
 import com.teamc6.chatSystem.exception.ResourceNotAcceptableExecption;
 import com.teamc6.chatSystem.exception.ResourceNotFoundException;
+import com.teamc6.chatSystem.repository.GroupChatRepository;
 import com.teamc6.chatSystem.repository.UserRepository;
 import com.teamc6.chatSystem.service.UserService;
 import com.teamc6.chatSystem.utils.EmailUtils;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private EmailChecking emailChecking;
     private PasswordEncoder passwordEncoder;
-
+    private GroupChatRepository groupChatRepository;
     public User save(User u) {
         var optional = userRepository.findById(u.getUserId());
 
@@ -124,10 +125,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean deleteById(Long ID) {
         Optional<User> optional = userRepository.findById(ID);
+
         if(!optional.isPresent())
         {
             throw new ResourceNotFoundException("User", "user: ",ID);
         }
+        User u = optional.get();
+        for (GroupChat g : u.getGroups()){
+            g.removeMember(u);
+            groupChatRepository.saveAndFlush(g);
+        }
+        for (GroupChat g : u.getGroupAdmins()){
+            g.removeAdmin(u);
+            groupChatRepository.saveAndFlush(g);
+        }
+        u.getBlockers().clear();
+        u.getBlocking().clear();
+      //  userRepository.saveAndFlush(u);
         userRepository.delete(optional.get());
         return true;
     }
