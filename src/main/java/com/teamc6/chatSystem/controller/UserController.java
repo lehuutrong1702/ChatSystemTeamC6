@@ -47,7 +47,7 @@ public class UserController {
         System.out.println("password: " + u.getPassword());
         if(emailChecking.check(u.getEmail()) == true)
         {
-              Thread emailThread = new Thread(() -> EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword()));
+              Thread emailThread = new Thread(() -> {EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword());});
               emailThread.start();
         }
         else {

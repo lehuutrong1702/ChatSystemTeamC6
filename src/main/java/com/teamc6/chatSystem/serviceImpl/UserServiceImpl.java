@@ -36,14 +36,7 @@ public class UserServiceImpl implements UserService {
         }
         //u.setPassword(PasswordGenerator.generatePassword());
         System.out.println("password: " + u.getPassword());
-        if(emailChecking.check(u.getEmail()) == true)
-        {
-            EmailUtils.getInstance().sendPassword(u.getEmail(), u.getPassword());
-            return userRepository.saveAndFlush(u);
-        }
-        else {
-            throw new ResourceNotAcceptableExecption("User", "email", u.getEmail());
-        }
+        return userRepository.saveAndFlush(u);
     }
 
     @Override
