@@ -117,4 +117,12 @@ public class UserActiveSessionServiceImpl implements UserActiveSessionService {
         }
         return filteredUsers;
     }
+
+    @Override
+    public boolean isOnline(Long userId) {
+        List<UserActiveSession> list = userActiveSessionRepository.sessionOnline(userId);
+        if(list.size() == 0)
+            return false;
+        return true;
+    }
 }

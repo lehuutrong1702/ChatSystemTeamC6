@@ -21,4 +21,5 @@ public interface UserActiveSessionService {
     List<UserActiveSession> getAll();
     List<UserActiveSession> getByTime(Date start,Date end);
 
+    boolean isOnline(Long userId);
 }
