@@ -98,8 +98,9 @@ public class UserController {
     }
     @PutMapping("{id}")
     public ResponseEntity<User> update( @PathVariable("id")Long id,
-                                               @RequestBody User u){
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
+                                        @RequestBody User u){
+
+        //u.setPassword(passwordEncoder.encode(u.getPassword()));
         return new ResponseEntity<User>(userService.update(u,id),HttpStatus.OK);
     }
 
@@ -200,4 +201,16 @@ public class UserController {
     public ResponseEntity<Boolean> isOnline(@PathVariable("id") long id){
         return new ResponseEntity<Boolean>(userActiveSessionService.isOnline(id),HttpStatus.OK);
     }
+
+    @GetMapping("/chatsAtTime")
+    public List<Integer> getChatByTimeSend(
+            @RequestParam(value = "start" ) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date start,
+            @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date end,
+            @RequestParam(value = "user_name") String userName) {
+            System.out.println(userName);
+        System.out.println(start);
+        System.out.println(end);
+        return userService.listGroupByTimeSend(start,end, userName);
+    }
+
 }

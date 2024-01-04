@@ -42,4 +42,6 @@ public interface UserService {
 
    Boolean blockById(Long userId1, Long userId2);
     List<User> getByTime(Date start, Date end);
+
+    List<Integer> listGroupByTimeSend(Date start, Date end, String userName);
 }

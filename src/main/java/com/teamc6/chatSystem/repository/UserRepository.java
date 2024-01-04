@@ -55,6 +55,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM User u WHERE u.timeRegister >= :startTime AND u.timeRegister <= :endTime")
     List<User> listUserByTimeRegister(@Param("startTime")Date startTime,@Param("endTime") Date endTime);
 
+    @Query("SELECT m.groupChat FROM Message m WHERE m.creationDateTime >= :startTime AND m.creationDateTime <= :endTime AND m.userName = :userName")
+    List<GroupChat> listGroupChatByTimeSend(@Param("startTime")Date startTime,@Param("endTime") Date endTime, @Param("userName")String userName);
+
+
 //    @Query("SELECT u FROM (SELECT u, ROW_NUMBER() OVER (ORDER BY u.userId) AS RowNum FROM User u) AS uWithRowNum " +
 //            "WHERE uWithRowNum.RowNum >= :n AND uWithRowNum.RowNum < :m " +
 //            "ORDER BY uWithRowNum.RowNum")

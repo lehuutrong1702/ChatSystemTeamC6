@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private EmailChecking emailChecking;
-
+    private PasswordEncoder passwordEncoder;
 
     public User save(User u) {
         var optional = userRepository.findById(u.getUserId());
@@ -55,8 +56,16 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("User", "user", u.getUserId());
         }
         User existUser = optional.get();
+
         existUser.setFullName(u.getFullName());
-        existUser.setPassword(u.getPassword());
+
+        System.out.println(existUser.getPassword());
+        System.out.println(u.getPassword());
+        if(!existUser.getPassword().equals(u.getPassword()))
+        {
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+            existUser.setPassword(u.getPassword());
+        }
         existUser.setUserName(u.getUserName());
         existUser.setEmail(u.getEmail());
         existUser.setBirthDay(u.getBirthDay());
@@ -261,5 +270,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getByTime(Date start, Date end) {
         return  userRepository.listUserByTimeRegister(start,end);
+    }
+
+    @Override
+    public List<Integer> listGroupByTimeSend(Date start, Date end, String userName) {
+        List<GroupChat> groups = userRepository.listGroupChatByTimeSend(start, end, userName);
+        int countPPL = 0;
+        int countGroup = 0;
+        for(var g : groups){
+            if(g.getTimeCreate() == null){
+                countPPL++;
+            }else countGroup++;
+        }
+        List<Integer> result = new ArrayList<>();
+        result.add(countPPL);
+        result.add(countGroup);
+        return result;
     }
 }

@@ -52,11 +52,13 @@ public class ClientHandler implements Runnable {
         while (socket.isConnected()){
             try{
                 Object obj = reader.readObject();
-                MessageObj messageFromClient = (MessageObj)obj ;
-                Message message = new Message(this.clientUsername, messageFromClient.message());
-                message.setGroupChat(server.getGroupChatService().findById(server.getGroupChatID()));
-                server.getMessageService().save(message);
-                broadcastMessage(messageFromClient);
+                if(obj instanceof MessageObj) {
+                    MessageObj messageFromClient = (MessageObj) obj;
+                    Message message = new Message(this.clientUsername, messageFromClient.message());
+                    message.setGroupChat(server.getGroupChatService().findById(server.getGroupChatID()));
+                    server.getMessageService().save(message);
+                }
+                broadcastMessage(obj);
             } catch (IOException e) {
                 closeEverything(socket, reader, writer);
                 break;

@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name="message")
@@ -24,10 +24,10 @@ public class Message {
 
     @Column(name="send_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime creationDateTime;
+    private Date creationDateTime;
     @PrePersist
     protected void onCreate() {
-        creationDateTime = LocalDateTime.now();
+        creationDateTime = new Date();
     }
 
     @Column(name="user_name", nullable = false)
